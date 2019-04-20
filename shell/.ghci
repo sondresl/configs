@@ -1,0 +1,3 @@
+:set prompt "\ESC[34;1mλ > \ESC[m"
+:set +t
+:m + Text.Show.Functions

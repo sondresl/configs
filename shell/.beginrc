@@ -1,0 +1,29 @@
+" Basic .vimrc template
+
+" ==============
+" =  SETTINGS  =
+" ==============
+
+set nocompatible                " Needed to access vim features (rather than only vi features)
+syntax enable                   " Enable syntax highlighting 
+filetype plugin indent on       " Settings based on filetype
+set backspace=indent,eol,start  " Backspace behaves as expected
+set mouse=a                     " Allow mouse support
+
+" To enable featues, use 'set ...', to disable
+" write 'set no...', e.g. 'set number' or 'set nonumber'.
+" If you are wondering that a command does, write ':h <command>' 
+" to see the help page for that command.
+
+set wildmenu                    " Tab completion when multiple options available
+
+" Indentation
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smarttab
+
+" Line numbers
+set nonumber                    " Line numbers
+set norelativenumber            " Relative line numbers (look for yourself!)
+set incsearch                   " Incremental highlighting while searching
