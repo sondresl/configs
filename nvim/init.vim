@@ -50,7 +50,7 @@ call plug#end()
 " ==== LIGHTLINE ====
 let g:lightline = { 'colorscheme': 'one',
                   \ 'active': {
-                  \   'left': [ [ 'paste' ],
+                  \   'left': [ [ 'mode', 'paste' ],
                   \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
                   \ },
                   \ }
