@@ -18,29 +18,25 @@ endif
 
 " Plugins
 call plug#begin('~/.nvim/plugged')
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-endif
     " Plug 'takac/vim-hardtime'
     Plug 'davidhalter/jedi-vim'
-    Plug 'ervandew/supertab'
-    Plug 'zchee/deoplete-jedi'
-    Plug 'mhinz/vim-grepper'
     Plug 'tpope/vim-commentary'                 " Comment properly
     Plug 'jpalardy/vim-slime'                   " Send code to REPL.
     Plug 'w0rp/ale'                             " Syntax checking
     Plug 'scrooloose/nerdtree'                  " Tree-view file finding
     Plug 'itchyny/lightline.vim'                " Modeline
-    Plug 'ElmCast/elm-vim'                      " Support for Elm
-    Plug 'SirVer/ultisnips'                     " Snippets
     Plug 'honza/vim-snippets'                   " Snippets library
     Plug 'dkasak/gruvbox'                       " Theme
     Plug '/usr/local/opt/fzf'
     Plug 'junegunn/fzf.vim'
-    Plug 'udalov/kotlin-vim'
     Plug 'sheerun/vim-polyglot'
-    Plug 'vim-syntastic/syntastic'
+    " Plug 'vim-syntastic/syntastic'
+    " Plug 'ervandew/supertab'
+    Plug 'SirVer/ultisnips'
     Plug 'vim-latex/vim-latex'
+    Plug 'vim-scripts/paredit.vim'
+    Plug 'dyng/ctrlsf.vim'
+    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 call plug#end()
 
 " ==============
@@ -65,7 +61,6 @@ map <C-t> :NERDTreeToggle<CR>
 " ==== ALE ====
 let g:ale_enabled = 0
 let g:ale_sign_column_always = 0
-nnoremap <leader>o :ALEToggle<CR>
 let g:ale_c_clang_options = "-std=c99 -Wall -Wpedantic -Wextra -fsanitize=address"
 
 " ==== Slime ====
@@ -83,10 +78,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
 " ==== Deoplete ====
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 
 " ==== Supertab ====
-let g:SuperTabClosePreviewOnPopupClose = 1
+" let g:SuperTabClosePreviewOnPopupClose = 1
 
 " ==== JEDI-VIM ====
 let g:jedi#goto_command = ""
@@ -96,6 +91,19 @@ let g:jedi#documentation_command = ""
 let g:jedi#usages_command = ""
 let g:jedi#completions_command = ""
 let g:jedi#rename_command = ""
+" ==== COC ====
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
 
 " =================
 " === LANGAUGES ===
@@ -132,11 +140,10 @@ end
 set scrolloff=2                         " Always have 4 lines above/below cursor
 set shortmess+=I                        " Remove startup message
 set omnifunc=syntaxcomplete#Complete
-" set guicursor=                          " Disables guicursor    
 
 " Wildmenu - Start writing a command and get options to <TAB> through.
 set wildmenu                            " Tab completion when multiple options available
-set wildignore+=*.class                 " Ignore *.class files in the wildmenu
+set wildignore+=*.class,*.aux           " Ignore *.class files in the wildmenu
 
 " Editor options
 set nonumber norelativenumber
@@ -173,6 +180,9 @@ set splitbelow
 set undodir=~/.vimdid
 set undofile
 
+" Diff
+" set diffopt=vertical,filler,context:3,indent-heuristic,algorithm:patience,internal
+
 " === COLORSCHEME ===
 let base16colorspace=256
 colorscheme gruvbox
@@ -200,27 +210,32 @@ augroup END
 " === KEY BINDS ===
 " =================
 
+" Map ctrl-a to enter command mode.
+map <C-s> :
+
 " Leader key / Search
 map <silent> <leader>c :!ctags -R .<CR>
 map <leader>s :source ~/.config/nvim/init.vim<CR>
 map <leader>e :vs $MYVIMRC<CR>
-map gj :join<CR>
 map <leader>w :write<CR>
+map <leader>q :q<CR>
 map <space><space> :e#<CR>
-noremap <silent> <leader><cr> :noh<cr>
-nnoremap <F12> :silent! !clang-format -i -style='WebKit' %<CR>
+nnoremap <leader>o :ALEToggle<CR>
 
-" ==== FZF ====
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
+" === FZF ===
 map <leader>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> - :Files <C-r>=expand("%:h")<CR>/<CR>
 map <leader>r :Rg<CR>
 map <leader>t yiw:Tags "<CR><CR>
 map <leader>y yiw:Rg "<CR>
+nnoremap <leader>h :Helptags<CR>
 
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" === F Keys ===
+nnoremap <F12> :silent! !clang-format -i -style='WebKit' %<CR>
 
 " F-buttons (Fairly rare and specific uses)
 autocmd FileType python map <F9> :w<CR>:!python %<CR>

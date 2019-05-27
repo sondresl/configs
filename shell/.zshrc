@@ -75,6 +75,8 @@ source $ZSH/oh-my-zsh.sh
 set -g mode-mouse on
 set -g mouse-resize-pane on
 
+set -o emacs
+
 #
 # Main prompt
 #
@@ -82,10 +84,11 @@ set -g mouse-resize-pane on
 
 local host_name="%{$fg[red]%}Sondre"
 local path_string="%{$fg[white]%}%1d"
-local prompt_string="$"
+local prompt_string="🐵"
 
 # Make prompt_string red if the previous command failed.
-local return_status="%(?:%{$fg[blue]%}$prompt_string:%{$fg[red]%}$prompt_string)"
+# local return_status="%(?:%{$fg[blue]%}$prompt_string:%{$fg[red]%}$prompt_string)"
+local return_status="%(?:%{$fg[blue]%}$prompt_string:🙈)"
 
 
 # PROMPT='${host_name} ${path_string} ${return_status} %{$reset_color%}'
@@ -156,12 +159,7 @@ function c() {
 }
 
 # fzf
-# fda - including hidden directories
-function fda() {
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
-}
-
+#
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
     local pid 
@@ -206,5 +204,11 @@ alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py
 alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
 
 source /Users/sondrelunde/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.fzf.zsh
+#
+# Bindings for fzf
+bindkey '^X' fzf-cd-widget
+export FZF_DEFAULT_COMMAND='fd --type file'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-set -o vi
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
