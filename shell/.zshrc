@@ -84,11 +84,11 @@ set -o emacs
 
 local host_name="%{$fg[red]%}Sondre"
 local path_string="%{$fg[white]%}%1d"
-local prompt_string="🐵"
+local prompt_string="$"
 
 # Make prompt_string red if the previous command failed.
-# local return_status="%(?:%{$fg[blue]%}$prompt_string:%{$fg[red]%}$prompt_string)"
-local return_status="%(?:%{$fg[blue]%}$prompt_string:🙈)"
+local return_status="%(?:%{$fg[blue]%}$prompt_string:%{$fg[red]%}$prompt_string)"
+# local return_status="%(?:%{$fg[blue]%}$prompt_string:🙈)"
 
 
 # PROMPT='${host_name} ${path_string} ${return_status} %{$reset_color%}'
@@ -142,22 +142,6 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Allow Ctrl-z to toggle between suspend and resume 
-function Resume {  
-    fg
-    zle push-input 
-    BUFFER=""
-    zle accept-line
-} 
-zle -N Resume
-bindkey "^Z" Resume
-
-function c() {
-    cd $1
-    clear
-    exa -la
-}
-
 # fzf
 #
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
@@ -198,10 +182,10 @@ alias ff='fzf-tmux'
 alias sml='rlwrap sml'
 alias swipl='rlwrap swipl'
 alias tls='tmux ls'
-alias ta='tmux a -t '
-alias clojure='rlwrap clojure'
+alias ta='tmux a -t'
 alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
 alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
+alias tree='ls -la -T'
 
 source /Users/sondrelunde/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.fzf.zsh

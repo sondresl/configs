@@ -20,23 +20,34 @@ endif
 call plug#begin('~/.nvim/plugged')
     " Plug 'takac/vim-hardtime'
     Plug 'davidhalter/jedi-vim'
+    Plug 'kien/rainbow_parentheses.vim'
     Plug 'tpope/vim-commentary'                 " Comment properly
+    Plug 'tpope/vim-fireplace'                  " Clojure repl suppprt
     Plug 'jpalardy/vim-slime'                   " Send code to REPL.
     Plug 'w0rp/ale'                             " Syntax checking
-    Plug 'scrooloose/nerdtree'                  " Tree-view file finding
     Plug 'itchyny/lightline.vim'                " Modeline
     Plug 'honza/vim-snippets'                   " Snippets library
-    Plug 'dkasak/gruvbox'                       " Theme
+    Plug 'gruvbox-community/gruvbox'            " Theme
     Plug '/usr/local/opt/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'sheerun/vim-polyglot'
-    " Plug 'vim-syntastic/syntastic'
-    " Plug 'ervandew/supertab'
     Plug 'SirVer/ultisnips'
     Plug 'vim-latex/vim-latex'
-    Plug 'vim-scripts/paredit.vim'
-    Plug 'dyng/ctrlsf.vim'
-    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+    Plug 'wellle/targets.vim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'rust-lang/rust.vim'
+    if has('nvim')
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    else
+        Plug 'Shougo/deoplete.nvim'
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    Plug 'deoplete-plugins/deoplete-jedi'
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
 call plug#end()
 
 " ==============
@@ -51,17 +62,62 @@ let g:lightline = { 'colorscheme': 'one',
                   \ },
                   \ }
 
-" ==== NERDTREE ====
-let NERDTreeIgnore = ['__pycache__', '\.pyc$','\.o$', '\.so$', '\.a$', '\.swp', '*\.swp', '\.swo', '\.swn', '\.swh', '\.swm', '\.swl', '\.swk', '\.sw*$', '[a-zA-Z]*egg[a-zA-Z]*', '.DS_Store', '.class']
-let NERDTreeShowHidden=1
-let g:NERDTreeWinPos="left"
-let g:NERDTreeDirArrows=0
-map <C-t> :NERDTreeToggle<CR>
+" ==== Language Server ====
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_loadSettings = 1
+let g:LanguageClient_diagnosticsEnable = 0
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rls'],
+    \ }
 
 " ==== ALE ====
-let g:ale_enabled = 0
+let g:ale_enabled = 1
 let g:ale_sign_column_always = 0
 let g:ale_c_clang_options = "-std=c99 -Wall -Wpedantic -Wextra -fsanitize=address"
+
+" only lint on save --> Taken from https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.vim
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_enter = 0
+let g:ale_virtualtext_cursor = 1
+
+" Ale for Rust
+let g:ale_rust_rls_config = {
+	\ 'rust': {
+		\ 'all_targets': 1,
+		\ 'build_on_save': 1,
+		\ 'clippy_preference': 'on'
+	\ }
+	\ }
+let g:ale_rust_rls_toolchain = ''
+let g:ale_linters = {'rust': ['rls']}
+" highlight link ALEWarningSign Todo
+" highlight link ALEErrorSign WarningMsg
+" highlight link ALEVirtualTextWarning Todo
+" highlight link ALEVirtualTextInfo Todo
+" highlight link ALEVirtualTextError WarningMsg
+" highlight ALEError guibg=None
+" highlight ALEWarning guibg=None
+
+let g:rustfmt_command = "rustfmt +nightly"
+let g:rustfmt_autosave = 1
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+
+" ==== NCM ====
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" set completeopt=noinsert,menuone,noselect
+
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('sources', {
+\ '_': ['ale', 'foobar'],
+\})
 
 " ==== Slime ====
 if exists('$TMUX')
@@ -77,9 +133,6 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
-" ==== Deoplete ====
-" let g:deoplete#enable_at_startup = 1
-
 " ==== Supertab ====
 " let g:SuperTabClosePreviewOnPopupClose = 1
 
@@ -91,19 +144,22 @@ let g:jedi#documentation_command = ""
 let g:jedi#usages_command = ""
 let g:jedi#completions_command = ""
 let g:jedi#rename_command = ""
+
 " ==== COC ====
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" autocmd FileType scheme let b:coc_pairs_disabled = ["'"]
 
-let g:coc_snippet_next = '<tab>'
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
+
+" let g:coc_snippet_next = '<tab>'
 
 " =================
 " === LANGAUGES ===
@@ -120,6 +176,12 @@ let g:tex_flavor='latex'
 
 " ==== MAKEFILE ====
 autocmd FileType make setlocal noexpandtab
+
+" ==== Rainbow Parens
+au VimEnter *.scm,*.clj RainbowParenthesesToggle
+au Syntax *.scm,*.clj RainbowParenthesesLoadRound
+au Syntax *.scm,*.clj RainbowParenthesesLoadSquare
+au Syntax *.scm,*.clj RainbowParenthesesLoadBraces
 
 " ================
 " === SETTINGS ===
@@ -139,6 +201,7 @@ if has('nvim')
 end
 set scrolloff=2                         " Always have 4 lines above/below cursor
 set shortmess+=I                        " Remove startup message
+set shortmess+=c
 set omnifunc=syntaxcomplete#Complete
 
 " Wildmenu - Start writing a command and get options to <TAB> through.
@@ -179,6 +242,8 @@ set splitbelow
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
+
+let &runtimepath.=',~/.vim/bundle/neoterm'
 
 " Diff
 " set diffopt=vertical,filler,context:3,indent-heuristic,algorithm:patience,internal
@@ -246,6 +311,9 @@ autocmd FileType c map <silent> <F10> :!make; ./out > clang_output<CR><CR>
 " Make Y function like D and C.
 nnoremap Y y$
 
+nnoremap <CR> G
+nnoremap <BS> gg
+
 " Split movement
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -263,5 +331,4 @@ nnoremap æ :po<CR>zt
 " Leave insert mode in built-in Terminal emulator
 tnoremap <Esc> <C-\><C-n>
 
-" Certain commands that needs to be set at the end.
 set nottimeout
