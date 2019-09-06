@@ -1,6 +1,9 @@
 " Sondte Lunde
 " .vimrc
 
+" Rather than a leader bind, bind directly to space.
+" This also allows other keys (like BS and CR) to be used
+" in the same fashion without confusing the idea of a specific leader key.
 """" BIND LEADER
 let mapleader = " "                     " Leader key for various keybinds
 " Bind it before all plugin related leader binds.
@@ -18,7 +21,9 @@ endif
 
 " Plugins
 call plug#begin('~/.nvim/plugged')
-    " Plug 'takac/vim-hardtime'
+    Plug 'junegunn/vim-easy-align'
+    Plug 'vim-scripts/paredit.vim'
+    Plug 'takac/vim-hardtime'
     Plug 'davidhalter/jedi-vim'
     Plug 'kien/rainbow_parentheses.vim'
     Plug 'tpope/vim-commentary'                 " Comment properly
@@ -30,6 +35,7 @@ call plug#begin('~/.nvim/plugged')
     Plug 'gruvbox-community/gruvbox'            " Theme
     Plug '/usr/local/opt/fzf'
     Plug 'junegunn/fzf.vim'
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     Plug 'sheerun/vim-polyglot'
     Plug 'SirVer/ultisnips'
     Plug 'vim-latex/vim-latex'
@@ -119,13 +125,23 @@ call deoplete#custom#option('sources', {
 \ '_': ['ale', 'foobar'],
 \})
 
+" ==== Easy Align
+nmap ga <Plug>(EasyAlign)
+
+" ==== Markdown-preview
+nmap <Space>tt <Plug>MarkdownPreviewToggle
+nmap <Space>ts <Plug>MarkdownPreview
+
 " ==== Slime ====
 if exists('$TMUX')
     let g:slime_target = "tmux"
     let g:slime_paste_file = "$HOME/.slime_paste"
-    let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": ":.1"}
+    let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": "1"}
     let g:slime_python_ipython = 1
 end
+
+autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
+autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
 
 " ==== ULTISNIPS ====
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -160,6 +176,9 @@ let g:jedi#rename_command = ""
 " endfunction
 
 " let g:coc_snippet_next = '<tab>'
+"
+" ==== Hardtime ====
+let g:hardtime_default_on = 0
 
 " =================
 " === LANGAUGES ===
@@ -188,7 +207,7 @@ au Syntax *.scm,*.clj RainbowParenthesesLoadBraces
 " ================
 
 filetype plugin indent on
-syntax enable
+syntax on
 set encoding=utf-8
 set path+=**                            " Make certain commands look for all files in all subfolders
 set hidden
@@ -275,26 +294,24 @@ augroup END
 " === KEY BINDS ===
 " =================
 
-" Map ctrl-a to enter command mode.
+" Map ctrl-s to enter command mode.
 map <C-s> :
 
-" Leader key / Search
-map <silent> <leader>c :!ctags -R .<CR>
-map <leader>s :source ~/.config/nvim/init.vim<CR>
-map <leader>e :vs $MYVIMRC<CR>
-map <leader>w :write<CR>
-map <leader>q :q<CR>
+map <silent> <space>c :!ctags -R .<CR>
+map <space>s :source ~/.config/nvim/init.vim<CR>
+map <space>e :vs $MYVIMRC<CR>
+map <space>w :write<CR>
+map <space>q :q<CR>
 map <space><space> :e#<CR>
-nnoremap <leader>o :ALEToggle<CR>
+nnoremap <space>o :ALEToggle<CR>
 
 " === FZF ===
-map <leader>b :Buffers<CR>
+map <space>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> - :Files <C-r>=expand("%:h")<CR>/<CR>
-map <leader>r :Rg<CR>
-map <leader>t yiw:Tags "<CR><CR>
-map <leader>y yiw:Rg "<CR>
-nnoremap <leader>h :Helptags<CR>
+map <space>r :Rg<CR>
+map <space>y yiw:Rg "<CR>
+nnoremap <space>h :Helptags<CR>
 
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
@@ -310,9 +327,6 @@ autocmd FileType c map <silent> <F10> :!make; ./out > clang_output<CR><CR>
 
 " Make Y function like D and C.
 nnoremap Y y$
-
-nnoremap <CR> G
-nnoremap <BS> gg
 
 " Split movement
 nnoremap <C-J> <C-W><C-J>

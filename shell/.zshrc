@@ -1,20 +1,7 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH=/Users/sondrelunde/.oh-my-zsh
-
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="mh"
-
-# Set list of themes to load
-# Setting this variable when ZSH_THEME=random
-# cause zsh load theme from this variable instead of
-# looking in ~/.oh-my-zsh/themes/
-# An empty array have no effect
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+export LC_ALL=en_US.UTF-8
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -54,49 +41,13 @@ ZSH_THEME="mh"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  zsh-syntax-highlighting
-  z
-  zsh-autosuggestions
-)
-
-source $ZSH/oh-my-zsh.sh
-
 # User configuration
-
-# source ~/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh  
 
 # Mouse support
 set -g mode-mouse on
 set -g mouse-resize-pane on
 
 set -o emacs
-
-#
-# Main prompt
-#
-
-
-local host_name="%{$fg[red]%}Sondre"
-local path_string="%{$fg[white]%}%1d"
-local prompt_string="$"
-
-# Make prompt_string red if the previous command failed.
-local return_status="%(?:%{$fg[blue]%}$prompt_string:%{$fg[red]%}$prompt_string)"
-# local return_status="%(?:%{$fg[blue]%}$prompt_string:🙈)"
-
-
-# PROMPT='${host_name} ${path_string} ${return_status} %{$reset_color%}'
-PROMPT='${path_string} ${return_status} %{$reset_color%}'
-
-git config --global oh-my-zsh.hide-status 0
-
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # Homebrew Python 3
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
@@ -107,40 +58,113 @@ export PATH="/Users/sondrelunde/anaconda3/bin:$PATH"
 # Add ghcid path for Haskell
 export PATH="$HOME/Library/Haskell/bin:$PATH"
 
-
 # Add path for SML
 export PATH=/usr/local/Cellar/smlnj/110.74/libexec/bin:$PATH
 
-# Path for Base-16 colours
+# ZPLUG
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+  git clone https://github.com/zplug/zplug ~/.zplug
+  source ~/.zplug/init.zsh && zplug update --self
+fi
+
+source ~/.zplug/init.zsh
+
+    zplug "plugins/git",   from:oh-my-zsh
+    zplug "rupa/z", use:"z.sh"
+    # zplug "denysdovhan/spaceship-prompt", use:"spaceship.zsh", from:github, as:theme
+    zplug "romkatv/powerlevel10k", use:"powerlevel10k.zsh-theme"
+    zplug "zsh-users/zsh-autosuggestions"
+    zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+# Install packages that have not been installed yet
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    else
+        echo
+    fi
+fi
+
+zplug load
+# ==== End of zplug
+
+source ~/.purepower
+
+# SPACESHIP_PROMPT_ORDER=(
+#     time          # Time stampts section
+#     user          # Username section
+#     dir           # Current directory section
+#     host          # Hostname section
+#     git           # Git section (git_branch + git_status)
+#     # hg            # Mercurial section (hg_branch  + hg_status)
+#     package       # Package version
+#     # node          # Node.js section
+#     # ruby          # Ruby section
+#     # elm           # Elm section
+#     # elixir        # Elixir section
+#     # xcode         # Xcode section
+#     # swift         # Swift section
+#     # golang        # Go section
+#     # php           # PHP section
+#     rust          # Rust section
+#     haskell       # Haskell Stack section
+#     # julia         # Julia section
+#     # docker        # Docker section
+#     # aws           # Amazon Web Services section
+#     venv          # virtualenv section
+#     conda         # conda virtualenv section
+#     # pyenv         # Pyenv section
+#     # dotnet        # .NET section
+#     # ember         # Ember.js section
+#     # kubecontext   # Kubectl context section
+#     # terraform     # Terraform workspace section
+#     # exec_time     # Execution time
+#     line_sep      # Line break
+#     # battery       # Battery level and status
+#     # vi_mode       # Vi-mode indicator
+#     jobs          # Background jobs indicator
+#     exit_code     # Exit code section
+#     char          # Prompt character
+# )
+
+# Base16 Shell
 BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Aliases
+alias k='javac *java'
+alias rmcl='rm *.class'
+alias j='java'
+alias jc='rm *.class'
+alias l='clear; exa -la --group-directories-first'
+alias ls='exa'
+alias uio='ssh -YC sondrslu@login.ifi.uio.no'
+alias uiofiler='sshfs sondrslu@login.uio.no: ~/uio -o reconnect,modules=iconv,from_code=utf8'
+alias scm='rlwrap /Applications/Racket\ v7.2/bin/plt-r5rs'
+alias racket='rlwrap /Applications/Racket\ v7.2/bin/racket'
+alias rpi='ssh pi@192.168.0.10'
+alias vim='nvim'
+alias ff='fzf-tmux'
+alias sml='rlwrap sml'
+alias swipl='rlwrap swipl'
+alias tls='tmux ls'
+alias ta='tmux a -t'
+alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
+alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
+alias tree='ls -la -T'
+alias host='cd ~/dev/UiO/H19'
+alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+# Functions
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+take() {
+    mkdir $1
+    cd $1
+}
 
 # fzf
 #
@@ -165,34 +189,10 @@ z() {
   cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
 }
 
-# Aliases
-alias work='cd ~/Workspace'
-alias k='javac *java'
-alias rmcl='rm *.class'
-alias j='java'
-alias jc='rm *.class'
-alias l='clear; exa -la'
-alias ls='exa'
-alias uio='ssh -YC sondrslu@login.ifi.uio.no'
-alias uiofiler='sshfs sondrslu@login.uio.no: ~/uio -o reconnect,modules=iconv,from_code=utf8'
-alias scheme='rlwrap /Applications/Racket\ v7.2/bin/plt-r5rs'
-alias rpi='ssh pi@192.168.0.10'
-alias vim='nvim'
-alias ff='fzf-tmux'
-alias sml='rlwrap sml'
-alias swipl='rlwrap swipl'
-alias tls='tmux ls'
-alias ta='tmux a -t'
-alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
-alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
-alias tree='ls -la -T'
-
-source /Users/sondrelunde/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.fzf.zsh
-#
-# Bindings for fzf
 bindkey '^X' fzf-cd-widget
-export FZF_DEFAULT_COMMAND='fd --type file'
+export FZF_DEFAULT_COMMAND='fd --hidden --type f --no-ignore-vcs'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --hidden --type d"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
