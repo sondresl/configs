@@ -1,4 +1,4 @@
-" Sondte Lunde
+" Sondre Lunde
 " .vimrc
 
 " Rather than a leader bind, bind directly to space.
@@ -14,7 +14,7 @@ let mapleader = " "                     " Leader key for various keybinds
 
 " Automatically install Plug if not installed.
 if empty(glob('~/.nvim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -31,13 +31,13 @@ call plug#begin('~/.nvim/plugged')
     Plug 'jpalardy/vim-slime'                   " Send code to REPL.
     Plug 'w0rp/ale'                             " Syntax checking
     Plug 'itchyny/lightline.vim'                " Modeline
-    Plug 'honza/vim-snippets'                   " Snippets library
+    " Plug 'honza/vim-snippets'                   " Snippets library
     Plug 'gruvbox-community/gruvbox'            " Theme
     Plug '/usr/local/opt/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     Plug 'sheerun/vim-polyglot'
-    Plug 'SirVer/ultisnips'
+    " Plug 'SirVer/ultisnips'
     Plug 'vim-latex/vim-latex'
     Plug 'wellle/targets.vim'
     Plug 'roxma/nvim-yarp'
@@ -49,6 +49,8 @@ call plug#begin('~/.nvim/plugged')
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
+    Plug 'Shougo/neosnippet.vim'
+    Plug 'Shougo/neosnippet-snippets'
     Plug 'deoplete-plugins/deoplete-jedi'
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
@@ -136,12 +138,17 @@ nmap <Space>ts <Plug>MarkdownPreview
 if exists('$TMUX')
     let g:slime_target = "tmux"
     let g:slime_paste_file = "$HOME/.slime_paste"
-    let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": "1"}
+    let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": ":.1"}
     let g:slime_python_ipython = 1
 end
 
 autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
 autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
+
+" ==== Neosnippets
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " ==== ULTISNIPS ====
 let g:UltiSnipsExpandTrigger="<tab>"
