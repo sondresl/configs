@@ -13,32 +13,30 @@ let mapleader = " "                     " Leader key for various keybinds
 " ===============
 
 " Automatically install Plug if not installed.
-if empty(glob('~/.nvim/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Plugins
 call plug#begin('~/.nvim/plugged')
-    Plug 'junegunn/vim-easy-align'
     Plug 'vim-scripts/paredit.vim'
     Plug 'takac/vim-hardtime'
     Plug 'davidhalter/jedi-vim'
     Plug 'kien/rainbow_parentheses.vim'
     Plug 'tpope/vim-commentary'                 " Comment properly
-    Plug 'tpope/vim-fireplace'                  " Clojure repl suppprt
     Plug 'jpalardy/vim-slime'                   " Send code to REPL.
     Plug 'w0rp/ale'                             " Syntax checking
     Plug 'itchyny/lightline.vim'                " Modeline
-    " Plug 'honza/vim-snippets'                   " Snippets library
+    Plug 'honza/vim-snippets'                   " Snippets library
     Plug 'gruvbox-community/gruvbox'            " Theme
     Plug '/usr/local/opt/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     Plug 'sheerun/vim-polyglot'
-    " Plug 'SirVer/ultisnips'
-    Plug 'vim-latex/vim-latex'
+    Plug 'SirVer/ultisnips'
+    " Plug 'lervag/vimtex'
     Plug 'wellle/targets.vim'
     Plug 'roxma/nvim-yarp'
     Plug 'rust-lang/rust.vim'
@@ -49,8 +47,6 @@ call plug#begin('~/.nvim/plugged')
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
-    Plug 'Shougo/neosnippet.vim'
-    Plug 'Shougo/neosnippet-snippets'
     Plug 'deoplete-plugins/deoplete-jedi'
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
@@ -100,32 +96,17 @@ let g:ale_rust_rls_config = {
 	\ }
 let g:ale_rust_rls_toolchain = ''
 let g:ale_linters = {'rust': ['rls']}
-" highlight link ALEWarningSign Todo
-" highlight link ALEErrorSign WarningMsg
-" highlight link ALEVirtualTextWarning Todo
-" highlight link ALEVirtualTextInfo Todo
-" highlight link ALEVirtualTextError WarningMsg
-" highlight ALEError guibg=None
-" highlight ALEWarning guibg=None
 
 let g:rustfmt_command = "rustfmt +nightly"
 let g:rustfmt_autosave = 1
 let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
 
-" ==== NCM ====
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-" set completeopt=noinsert,menuone,noselect
-
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-
-
+" ==== Deoplete ====
 let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('sources', {
-\ '_': ['ale', 'foobar'],
-\})
+" call deoplete#custom#option('sources', {
+" \ '_': ['ale', 'foobar'],
+" \})
 
 " ==== Easy Align
 nmap ga <Plug>(EasyAlign)
@@ -145,19 +126,11 @@ end
 autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
 autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
 
-" ==== Neosnippets
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
 " ==== ULTISNIPS ====
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
-
-" ==== Supertab ====
-" let g:SuperTabClosePreviewOnPopupClose = 1
 
 " ==== JEDI-VIM ====
 let g:jedi#goto_command = ""
@@ -168,22 +141,6 @@ let g:jedi#usages_command = ""
 let g:jedi#completions_command = ""
 let g:jedi#rename_command = ""
 
-" ==== COC ====
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? coc#_select_confirm() :
-"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-
-" autocmd FileType scheme let b:coc_pairs_disabled = ["'"]
-
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" let g:coc_snippet_next = '<tab>'
-"
 " ==== Hardtime ====
 let g:hardtime_default_on = 0
 
@@ -191,14 +148,17 @@ let g:hardtime_default_on = 0
 " === LANGAUGES ===
 " =================
 
-" ==== JAVA ====
-" autocmd FileType java setlocal omnifunc=javacomplete#Complete
-
 " ==== PYTHON ====
 let g:jedi#completions_enabled = 0
 
 " ==== TEX ====
 let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
+
+au FileType *.tex execute ':let maplocalleader = "<CR>"'
 
 " ==== MAKEFILE ====
 autocmd FileType make setlocal noexpandtab
@@ -216,19 +176,22 @@ au Syntax *.scm,*.clj RainbowParenthesesLoadBraces
 filetype plugin indent on
 syntax on
 set encoding=utf-8
-set path+=**                            " Make certain commands look for all files in all subfolders
+set path=.,**                            " Make certain commands look for all files in all subfolders
+set autoread
 set hidden
 set showcmd
 set noshowmode                          " Don't show mode in command line (its on the lightline!)
-set nohlsearch                          " Don't highlight searches
+set nohlsearch                          " Don't highlight searchee
 set incsearch                           " Search incrementally, don't wait for <CR>
 if has('nvim')
     set inccommand=nosplit
 end
-set scrolloff=2                         " Always have 4 lines above/below cursor
+set scrolloff=2                         " Always have 2 lines above/below cursor
 set shortmess+=I                        " Remove startup message
 set shortmess+=c
 set omnifunc=syntaxcomplete#Complete
+set dict+=~/.config/nvim/dicts/ordliste_aspell.txt
+set complete+=k
 
 " Wildmenu - Start writing a command and get options to <TAB> through.
 set wildmenu                            " Tab completion when multiple options available
@@ -266,7 +229,7 @@ set splitright
 set splitbelow
 
 " Permanent undo
-set undodir=~/.vimdid
+set undodir=~/.config/nvim/.vimdid
 set undofile
 
 let &runtimepath.=',~/.vim/bundle/neoterm'
@@ -311,6 +274,8 @@ map <space>w :write<CR>
 map <space>q :q<CR>
 map <space><space> :e#<CR>
 nnoremap <space>o :ALEToggle<CR>
+
+map <CR>s :vs+ ~/.nvim/plugged/vim-snippets/UltiSnips/markdown.snippets<CR>
 
 " === FZF ===
 map <space>b :Buffers<CR>

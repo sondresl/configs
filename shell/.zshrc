@@ -4,11 +4,11 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export LC_ALL=en_US.UTF-8
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion. Case
 # sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -23,7 +23,7 @@ export LC_ALL=en_US.UTF-8
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -42,6 +42,7 @@ export LC_ALL=en_US.UTF-8
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # User configuration
+zstyle ':completion:*' menu select
 
 # Mouse support
 set -g mode-mouse on
@@ -137,7 +138,6 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 
 # Aliases
 alias k='javac *java'
-alias rmcl='rm *.class'
 alias j='java'
 alias jc='rm *.class'
 alias l='clear; exa -la --group-directories-first'
@@ -155,9 +155,10 @@ alias tls='tmux ls'
 alias ta='tmux a -t'
 alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
 alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
-alias tree='ls -la -T'
+alias tree='exa -la -T'
 alias host='cd ~/dev/UiO/H19'
 alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
+alias vimo='vim -O'
 
 # Functions
 
