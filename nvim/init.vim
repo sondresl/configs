@@ -74,6 +74,12 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rls'],
     \ }
 
+" ==== Paredit ====
+let g:paredit_leader = '<CR>'
+let g:paredit_smartjump = 1
+let g:paredit_electric_return = 0
+
+
 " ==== ALE ====
 let g:ale_enabled = 1
 let g:ale_sign_column_always = 0
