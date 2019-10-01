@@ -62,6 +62,9 @@ export PATH="$HOME/Library/Haskell/bin:$PATH"
 # Add path for SML
 export PATH=/usr/local/Cellar/smlnj/110.74/libexec/bin:$PATH
 
+# Add path for ABS
+export PATH=/Users/sondrelunde/dev/UiO/master/abstools/frontend/bin/bash:$PATH
+
 # ZPLUG
 # Check if zplug is installed
 if [[ ! -d ~/.zplug ]]; then
@@ -159,6 +162,7 @@ alias tree='exa -la -T'
 alias host='cd ~/dev/UiO/H19'
 alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
 alias vimo='vim -O'
+alias todo='vim ~/.todo.md'
 
 # Functions
 
