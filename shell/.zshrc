@@ -4,7 +4,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export LC_ALL=en_US.UTF-8
 
 # Uncomment the following line to use case-sensitive completion.
-CASE_SENSITIVE="true"
+CASE_SENSITIVE="false"
 
 # Uncomment the following line to use hyphen-insensitive completion. Case
 # sensitive completion must be off. _ and - will be interchangeable.
@@ -52,6 +52,9 @@ set -o emacs
 
 # Homebrew Python 3
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
+#
+# Homebrew wants this path
+export PATH="/usr/local/sbin:$PATH"
 
 # added by Anaconda3 5.0.0 installer (Copied from .bash_profile)
 export PATH="/Users/sondrelunde/anaconda3/bin:$PATH"
@@ -60,7 +63,9 @@ export PATH="/Users/sondrelunde/anaconda3/bin:$PATH"
 export PATH="$HOME/Library/Haskell/bin:$PATH"
 
 # Add path for SML
-export PATH=/usr/local/Cellar/smlnj/110.74/libexec/bin:$PATH
+export PATH=/usr/local/smlnj/bin:$PATH
+
+export PATH=/Users/sondrelunde/.cabal/bin:$PATH
 
 # Add path for ABS
 export PATH=/Users/sondrelunde/dev/UiO/master/abstools/frontend/bin/bash:$PATH
