@@ -22,6 +22,7 @@ endif
 " Plugins
 call plug#begin('~/.nvim/plugged')
     Plug 'vim-scripts/paredit.vim'
+    Plug 'elmcast/elm-vim'
     Plug 'takac/vim-hardtime'
     Plug 'davidhalter/jedi-vim'
     Plug 'kien/rainbow_parentheses.vim'
@@ -38,7 +39,6 @@ call plug#begin('~/.nvim/plugged')
     Plug 'SirVer/ultisnips'
     " Plug 'lervag/vimtex'
     Plug 'wellle/targets.vim'
-    Plug 'roxma/nvim-yarp'
     Plug 'rust-lang/rust.vim'
     if has('nvim')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -79,6 +79,8 @@ let g:paredit_leader = '<CR>'
 let g:paredit_smartjump = 1
 let g:paredit_electric_return = 0
 
+" ==== Polyglot
+let g:polyglot_disabled = ['elm']
 
 " ==== ALE ====
 let g:ale_enabled = 1
@@ -113,9 +115,8 @@ let g:deoplete#enable_at_startup = 1
 " call deoplete#custom#option('sources', {
 " \ '_': ['ale', 'foobar'],
 " \})
+"
 
-" ==== Easy Align
-nmap ga <Plug>(EasyAlign)
 
 " ==== Markdown-preview
 nmap <Space>tt <Plug>MarkdownPreviewToggle
@@ -131,6 +132,7 @@ end
 
 autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
 autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
+autocmd FileType haskell nnoremap <c-c><c-d> :SlimeSend1 runhaskell <c-r>%<CR>
 
 " ==== ULTISNIPS ====
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -161,10 +163,8 @@ let g:jedi#completions_enabled = 0
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
-set conceallevel=1
+set conceallevel=0
 let g:tex_conceal='abdmg'
-
-au FileType *.tex execute ':let maplocalleader = "<CR>"'
 
 " ==== MAKEFILE ====
 autocmd FileType make setlocal noexpandtab
@@ -281,14 +281,11 @@ map <space>q :q<CR>
 map <space><space> :e#<CR>
 nnoremap <space>o :ALEToggle<CR>
 
-map <CR>s :vs+ ~/.nvim/plugged/vim-snippets/UltiSnips/markdown.snippets<CR>
-
 " === FZF ===
 map <space>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> - :Files <C-r>=expand("%:h")<CR>/<CR>
 map <space>r :Rg<CR>
-map <space>y yiw:Rg "<CR>
 nnoremap <space>h :Helptags<CR>
 
 command! -bang -nargs=? -complete=dir Files
@@ -302,6 +299,7 @@ autocmd FileType python map <F9> :w<CR>:!python %<CR>
 autocmd FileType python map <silent> <F10> :!python % > out<CR><CR>
 autocmd FileType c map <silent> <F9> :!make; ./out<CR>
 autocmd FileType c map <silent> <F10> :!make; ./out > clang_output<CR><CR>
+autocmd FileType tex map <silent> <space>y :!pdflatex %<CR>
 
 " Make Y function like D and C.
 nnoremap Y y$
