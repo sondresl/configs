@@ -21,7 +21,10 @@ endif
 
 " Plugins
 call plug#begin('~/.nvim/plugged')
-    Plug 'vim-scripts/paredit.vim'
+    Plug 'tpope/vim-fugitive'
+    Plug 'jceb/vim-orgmode'
+    " Plug 'vim-scripts/paredit.vim'
+    Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
     Plug 'elmcast/elm-vim'
     Plug 'takac/vim-hardtime'
     Plug 'davidhalter/jedi-vim'
@@ -86,8 +89,6 @@ let g:polyglot_disabled = ['elm']
 let g:ale_enabled = 1
 let g:ale_sign_column_always = 0
 let g:ale_c_clang_options = "-std=c99 -Wall -Wpedantic -Wextra -fsanitize=address"
-
-" only lint on save --> Taken from https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.vim
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_save = 1
@@ -105,6 +106,7 @@ let g:ale_rust_rls_config = {
 let g:ale_rust_rls_toolchain = ''
 let g:ale_linters = {'rust': ['rls']}
 
+" ==== Rust autoformat
 let g:rustfmt_command = "rustfmt +nightly"
 let g:rustfmt_autosave = 1
 let g:rustfmt_emit_files = 1
@@ -112,11 +114,6 @@ let g:rustfmt_fail_silently = 0
 
 " ==== Deoplete ====
 let g:deoplete#enable_at_startup = 1
-" call deoplete#custom#option('sources', {
-" \ '_': ['ale', 'foobar'],
-" \})
-"
-
 
 " ==== Markdown-preview
 nmap <Space>tt <Plug>MarkdownPreviewToggle
@@ -132,7 +129,6 @@ end
 
 autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
 autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
-autocmd FileType haskell nnoremap <c-c><c-d> :SlimeSend1 runhaskell <c-r>%<CR>
 
 " ==== ULTISNIPS ====
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -165,6 +161,9 @@ let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
 set conceallevel=0
 let g:tex_conceal='abdmg'
+
+" ==== PDF preview ====
+let g:livepreview_previewer = 'open -a Preview'
 
 " ==== MAKEFILE ====
 autocmd FileType make setlocal noexpandtab
@@ -220,7 +219,7 @@ set binary                              " Dont add newlines at the end of files.
 set noswapfile                          " Keep vim from creating automatic backup files.
 set showmatch                           " Show matching brackets.
 set clipboard=unnamed                   " Use default OS clipboard by default.
-set laststatus=2
+set laststatus=1
 
 " Indent and tabs options
 set tabstop=4
@@ -261,8 +260,17 @@ augroup configgroup
     autocmd BufEnter *.sh setlocal tabstop=2
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
+    autocmd BufEnter *.hs setlocal tabstop=2
+    autocmd BufEnter *.hs setlocal shiftwidth=2
+    autocmd BufEnter *.hs setlocal softtabstop=2
     autocmd BufEnter *.pl setlocal filetype=prolog
     autocmd BufEnter *.mini setlocal filetype=clojure
+augroup END
+
+augroup vimrc-incsearch-highlight
+    autocmd!
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
 
 
@@ -273,7 +281,6 @@ augroup END
 " Map ctrl-s to enter command mode.
 map <C-s> :
 
-map <silent> <space>c :!ctags -R .<CR>
 map <space>s :source ~/.config/nvim/init.vim<CR>
 map <space>e :vs $MYVIMRC<CR>
 map <space>w :write<CR>
@@ -288,6 +295,7 @@ nnoremap <silent> - :Files <C-r>=expand("%:h")<CR>/<CR>
 map <space>r :Rg<CR>
 nnoremap <space>h :Helptags<CR>
 
+" Preview in :Files
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
@@ -300,25 +308,46 @@ autocmd FileType python map <silent> <F10> :!python % > out<CR><CR>
 autocmd FileType c map <silent> <F9> :!make; ./out<CR>
 autocmd FileType c map <silent> <F10> :!make; ./out > clang_output<CR><CR>
 autocmd FileType tex map <silent> <space>y :!pdflatex %<CR>
+autocmd FileType haskell map <F9> :w<CR>:!runhaskell %<CR>
 
-" Make Y function like D and C.
-nnoremap Y y$
-
-" Split movement
+" Handy maps
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+nnoremap Y y$
+noremap H ^
+noremap L $
 
-noremap H     ^
-noremap L     $
+" Leader chords
+" Follow tags
+nnoremap <space>tt <C-]>
 
-" Jump to tag under cursor
-nnoremap å <C-]>zt
-" Jump back down the tag stack
-nnoremap æ :po<CR>zt
+" Move between tabs
+nnoremap <space>tn gt
+nnoremap <space>tp gT
+
+" Fugitive (git)
+nnoremap <space>ga :Gwrite<CR>
+nnoremap <space>gc :Gcommit<CR>
+nnoremap <space>gr :Gread<CR>
+nnoremap <space>gp :Gpush<CR>
+nnoremap <space>gg :G<CR>
+
+" Quickfix list
+nnoremap <space>cn :cnext<CR>
+nnoremap <space>cp :cprevious<CR>
+nnoremap <space>co :copen<CR>
+nnoremap <space>cc :cclose<CR>
+
+" Reload syntax
+nnoremap <space>ls :syntax sync fromStart<CR>
 
 " Leave insert mode in built-in Terminal emulator
 tnoremap <Esc> <C-\><C-n>
+
+" Temporary
+nmap <space>; :read ../rettermal.md<CR>
+nmap <space>u :read ../oblig3b_tester.scm<CR>
 
 set nottimeout
