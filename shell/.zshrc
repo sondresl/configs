@@ -29,7 +29,7 @@ export PATH=/usr/local/smlnj/bin:$PATH
 # Add path for ABS
 export PATH=/Users/sondrelunde/dev/UiO/master/abstools/frontend/bin/bash:$PATH
 
-export AOC='53616c7465645f5ffc3eea7ff953a35fa10ac6c7697f33a971f7453bd5e082b26a84ec2f29b815a19f95b15817e3e10c'
+source ~/.aockey
 
 # ZPLUG ===============================================================================
 # Check if zplug is installed
