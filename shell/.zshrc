@@ -29,6 +29,15 @@ export PATH=/usr/local/smlnj/bin:$PATH
 # Add path for ABS
 export PATH=/Users/sondrelunde/dev/UiO/master/abstools/frontend/bin/bash:$PATH
 
+# Path for cabal
+export PATH=/Users/sondrelunde/.cabal/bin:$PATH
+
+export BAT_CONFIG_PATH="/Users/sondrelunde/.config/shell"
+
+# Use vim to view man pages with colors
+export MANPAGER='nvim +Man!'
+export MANWIDTH=999
+
 source ~/.aockey
 
 # ZPLUG ===============================================================================
@@ -73,8 +82,8 @@ alias j='java'
 alias jc='rm *.class'
 alias l='clear; exa -la --group-directories-first'
 alias ls='exa'
-alias uio='ssh -YC sondrslu@login.ifi.uio.no'
-alias uiofiler='sshfs sondrslu@login.uio.no: ~/uio -o reconnect,modules=iconv,from_code=utf8'
+alias sshos='sshfs sondrslu@login.uio.no:inf4151 ~/dev/UiO/V20/inf4151 -o reconnect,modules=iconv,from_code=iso-8859-1'
+alias uiofiler='sshfs sondrslu@login.uio.no: ~/uio -o reconnect,modules=iconv,from_code=iso-8859-1'
 alias scm='rlwrap /Applications/Racket\ v7.4/bin/plt-r5rs'
 alias racket='rlwrap /Applications/Racket\ v7.4/bin/racket'
 alias drracket='/Applications/Racket\ v7.4/DrRacket.app/Contents/MacOS/DrRacket &'
@@ -87,11 +96,19 @@ alias tls='tmux ls'
 alias ta='tmux a -t'
 alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
 alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
-alias tree='exa -la -T'
+alias tree='exa -l -T'
 alias host='cd ~/dev/UiO/H19'
-alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
+alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN1010 26-01-1993'
 alias vimo='vim -O'
 alias todo='vim ~/.todo.md'
+alias mux='tmuxinator'
+alias timer='open ~/Dropbox/timelisteV20.numbers'
+alias journal='vim ~/Dropbox/Learning/journal.md'
+alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
+alias umos='umount -f sondrslu@login.uio.no:inf4151'
+
+# INF4151 relaterte aliaser
+alias p1='cd ~/dev/UiO/V20/inf4151/P1/1_pre'
 
 # Hub
 eval "$(hub alias -s)"

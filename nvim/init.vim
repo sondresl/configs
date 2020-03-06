@@ -22,7 +22,7 @@ endif
 " Plugins
 call plug#begin('~/.nvim/plugged')
     Plug 'tpope/vim-fugitive'
-    Plug 'jceb/vim-orgmode'
+    " Plug 'jceb/vim-orgmode'
     " Plug 'vim-scripts/paredit.vim'
     Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
     Plug 'elmcast/elm-vim'
@@ -43,6 +43,7 @@ call plug#begin('~/.nvim/plugged')
     " Plug 'lervag/vimtex'
     Plug 'wellle/targets.vim'
     Plug 'rust-lang/rust.vim'
+    Plug 'skywind3000/asyncrun.vim'
     if has('nvim')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     else
@@ -95,6 +96,13 @@ let g:ale_lint_on_save = 1
 let g:ale_lint_on_enter = 0
 let g:ale_virtualtext_cursor = 1
 
+let g:ale_fixers = { 'haskell': ['brittany'], 'c': ['clang-format']}
+let g:ale_c_clangformat_options = '-i -style=WebKit'
+
+map <space>af :ALEFix<CR>
+map <space>ap :ALEPrevious<CR>
+map <space>an :ALENextWrap<CR>
+
 " Ale for Rust
 let g:ale_rust_rls_config = {
 	\ 'rust': {
@@ -111,6 +119,7 @@ let g:rustfmt_command = "rustfmt +nightly"
 let g:rustfmt_autosave = 1
 let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
+
 
 " ==== Deoplete ====
 let g:deoplete#enable_at_startup = 1
@@ -219,7 +228,7 @@ set binary                              " Dont add newlines at the end of files.
 set noswapfile                          " Keep vim from creating automatic backup files.
 set showmatch                           " Show matching brackets.
 set clipboard=unnamed                   " Use default OS clipboard by default.
-set laststatus=1
+set laststatus=2
 
 " Indent and tabs options
 set tabstop=4
@@ -260,11 +269,22 @@ augroup configgroup
     autocmd BufEnter *.sh setlocal tabstop=2
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
+    autocmd BufEnter *.s setlocal tabstop=4
+    autocmd BufEnter *.s setlocal shiftwidth=4
+    autocmd BufEnter *.s setlocal softtabstop=4
+    autocmd BufEnter *.S setlocal tabstop=4
+    autocmd BufEnter *.S setlocal shiftwidth=4
+    autocmd BufEnter *.S setlocal softtabstop=4
     autocmd BufEnter *.hs setlocal tabstop=2
     autocmd BufEnter *.hs setlocal shiftwidth=2
     autocmd BufEnter *.hs setlocal softtabstop=2
     autocmd BufEnter *.pl setlocal filetype=prolog
     autocmd BufEnter *.mini setlocal filetype=clojure
+    autocmd BufEnter *.x setlocal filetype=haskell
+    autocmd BufEnter *.y setlocal filetype=haskell
+    autocmd FileType asm setlocal commentstring=#\ %s
+    autocmd BufEnter *.cmp setlocal filetype=pascal
+    autocmd FileType pascal setlocal commentstring=\(\*\ %s\ \*\)
 augroup END
 
 augroup vimrc-incsearch-highlight
@@ -293,14 +313,17 @@ map <space>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> - :Files <C-r>=expand("%:h")<CR>/<CR>
 map <space>r :Rg<CR>
+nnoremap <space>tt :Tags<CR>
 nnoremap <space>h :Helptags<CR>
 
 " Preview in :Files
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" === F Keys ===
+" Automatic formatting
 nnoremap <F12> :silent! !clang-format -i -style='WebKit' %<CR>
+autocmd FileType haskell set formatprg=brittany
+
 
 " F-buttons (Fairly rare and specific uses)
 autocmd FileType python map <F9> :w<CR>:!python %<CR>
@@ -320,8 +343,6 @@ noremap H ^
 noremap L $
 
 " Leader chords
-" Follow tags
-nnoremap <space>tt <C-]>
 
 " Move between tabs
 nnoremap <space>tn gt
@@ -346,8 +367,7 @@ nnoremap <space>ls :syntax sync fromStart<CR>
 " Leave insert mode in built-in Terminal emulator
 tnoremap <Esc> <C-\><C-n>
 
-" Temporary
-nmap <space>; :read ../rettermal.md<CR>
-nmap <space>u :read ../oblig3b_tester.scm<CR>
+" Binds for retting
+nmap <space>; :read ../rettemal.md<CR>
 
 set nottimeout
