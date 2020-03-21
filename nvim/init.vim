@@ -5,7 +5,7 @@
 " This also allows other keys (like BS and CR) to be used
 " in the same fashion without confusing the idea of a specific leader key.
 """" BIND LEADER
-let mapleader = " "                     " Leader key for various keybinds
+" let mapleader = " "                     " Leader key for various keybinds
 " Bind it before all plugin related leader binds.
 
 " ===============
@@ -21,8 +21,9 @@ endif
 
 " Plugins
 call plug#begin('~/.nvim/plugged')
+    Plug 'easymotion/vim-easymotion'
     Plug 'tpope/vim-fugitive'
-    " Plug 'jceb/vim-orgmode'
+    Plug 'jceb/vim-orgmode'
     " Plug 'vim-scripts/paredit.vim'
     Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
     Plug 'elmcast/elm-vim'
@@ -120,6 +121,10 @@ let g:rustfmt_autosave = 1
 let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
 
+" === easymotion ===
+" <Leader>f{char} to move to {char}
+map <CR> <Plug>(easymotion-overwin-f)
+nmap <space><CR> <Plug>(easymotion-overwin-f2)
 
 " ==== Deoplete ====
 let g:deoplete#enable_at_startup = 1
