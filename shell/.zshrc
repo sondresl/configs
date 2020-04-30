@@ -29,10 +29,11 @@ export PATH=/usr/local/smlnj/bin:$PATH
 # Add path for ABS
 export PATH=/Users/sondrelunde/dev/UiO/master/abstools/frontend/bin/bash:$PATH
 
-# Path for cabal
-export PATH=/Users/sondrelunde/.cabal/bin:$PATH
+# Path for Haskell
+export PATH=/Users/sondrelunde/.local/bin:$PATH
+export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
-export BAT_CONFIG_PATH="/Users/sondrelunde/.config/shell"
+export BAT_CONFIG_PATH="/Users/sondrelunde/.config/shell/bat.conf"
 
 # Use vim to view man pages with colors
 export MANPAGER='nvim +Man!'
@@ -50,7 +51,8 @@ fi
 source ~/.zplug/init.zsh
 
     zplug "plugins/git",   from:oh-my-zsh
-    zplug "rupa/z", use:"z.sh"
+    # zplug "rupa/z", use:"z."
+    zplug "skywind3000/z.lua"
     zplug "romkatv/powerlevel10k", use:"powerlevel10k.zsh-theme"
     zplug "zsh-users/zsh-autosuggestions"
     zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -102,13 +104,12 @@ alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN1010 26-01-1993'
 alias vimo='vim -O'
 alias todo='vim ~/.todo.md'
 alias mux='tmuxinator'
-alias timer='open ~/Dropbox/timelisteV20.numbers'
+alias timer='open ~/Dropbox/timelisteV20'
 alias journal='vim ~/Dropbox/Learning/journal.md'
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
-alias umos='umount -f sondrslu@login.uio.no:inf4151'
+alias umos='umount -f sondrslu@loft.uio.no:inf4151'
 
-# INF4151 relaterte aliaser
-alias p1='cd ~/dev/UiO/V20/inf4151/P1/1_pre'
+alias compila='java -classpath build/classes/ runtime.VirtualMachine'
 
 # Hub
 eval "$(hub alias -s)"
@@ -120,8 +121,7 @@ take() {
 }
 
 copyAll() {
-    cat $1/retting.md
-    grep poeng $1/retting.md
+    cat $1/*.md | pbcopy
 }
 
 runhs() {
@@ -130,27 +130,28 @@ runhs() {
 
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
-    local pid 
+    local pid
     if [ "$UID" != "0" ]; then
         pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
     else
         pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-    fi  
+    fi
 
     if [ "x$pid" != "x" ]
     then
         echo $pid | xargs kill -${1:-9}
-    fi  
+    fi
 }
 
 unalias z 2> /dev/null
 z() {
   [ $# -gt 0 ] && _z "$*" && return
-  cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+  cd "$(_zlua -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
 }
 
 source ~/.fzf.zsh
 bindkey '^X' fzf-cd-widget
-export FZF_DEFAULT_COMMAND='fd --hidden --type f --no-ignore-vcs'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --color auto'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --hidden --type d"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git"
+

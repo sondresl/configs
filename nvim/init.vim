@@ -1,11 +1,11 @@
 " Sondre Lunde
-" .vimrc
+" init.vim
 
 " Rather than a leader bind, bind directly to space.
 " This also allows other keys (like BS and CR) to be used
 " in the same fashion without confusing the idea of a specific leader key.
 """" BIND LEADER
-" let mapleader = " "                     " Leader key for various keybinds
+" let mapleader = ","                     " Leader key for various keybinds
 " Bind it before all plugin related leader binds.
 
 " ===============
@@ -21,55 +21,65 @@ endif
 
 " Plugins
 call plug#begin('~/.nvim/plugged')
+    " Movement and commands
     Plug 'easymotion/vim-easymotion'
+    Plug 'takac/vim-hardtime'
+    Plug '/usr/local/opt/fzf'
+    Plug 'junegunn/fzf.vim'
+    Plug 'tpope/vim-commentary'                 " Comment properly
+    Plug 'jpalardy/vim-slime'                   " Send code to REPL.
+    Plug 'wellle/targets.vim'
+    Plug 'skywind3000/asyncrun.vim'
+
+    " Look and feel
+    Plug 'junegunn/goyo.vim'
+    Plug 'kien/rainbow_parentheses.vim'
+    " Plug 'itchyny/lightline.vim'                " Modeline
+    Plug 'gruvbox-community/gruvbox'            " Theme
+    Plug 'sheerun/vim-polyglot'                 " Better language syntax coloring
+    Plug 'chriskempson/base16-vim'
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    let g:airline_theme='base16_vim'
+
+    " Git integration
     Plug 'tpope/vim-fugitive'
+
+    " Linting and autocomplete
+    Plug 'honza/vim-snippets'                   " Snippets library
+    Plug 'w0rp/ale'                             " Syntax checking
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'davidhalter/jedi-vim'
+
+    " Language specific
     Plug 'jceb/vim-orgmode'
     " Plug 'vim-scripts/paredit.vim'
     Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-    Plug 'elmcast/elm-vim'
-    Plug 'takac/vim-hardtime'
-    Plug 'davidhalter/jedi-vim'
-    Plug 'kien/rainbow_parentheses.vim'
-    Plug 'tpope/vim-commentary'                 " Comment properly
-    Plug 'jpalardy/vim-slime'                   " Send code to REPL.
-    Plug 'w0rp/ale'                             " Syntax checking
-    Plug 'itchyny/lightline.vim'                " Modeline
-    Plug 'honza/vim-snippets'                   " Snippets library
-    Plug 'gruvbox-community/gruvbox'            " Theme
-    Plug '/usr/local/opt/fzf'
-    Plug 'junegunn/fzf.vim'
+    " Plug 'elmcast/elm-vim'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-    Plug 'sheerun/vim-polyglot'
-    Plug 'SirVer/ultisnips'
-    " Plug 'lervag/vimtex'
-    Plug 'wellle/targets.vim'
     Plug 'rust-lang/rust.vim'
-    Plug 'skywind3000/asyncrun.vim'
-    if has('nvim')
-        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    else
-        Plug 'Shougo/deoplete.nvim'
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc'
-    endif
-    Plug 'deoplete-plugins/deoplete-jedi'
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh',
-        \ }
+
 call plug#end()
 
-" ==============
-" === COLORS ===
-" ==============
+" === COC ===
 
-" ==== LIGHTLINE ====
-let g:lightline = { 'colorscheme': 'one',
-                  \ 'active': {
-                  \   'left': [ [ 'mode', 'paste' ],
-                  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-                  \ },
-                  \ }
+" === GOYO ===
+let g:goyo_width = 120
+let g:goyo_heigth = 100
+
+" Make <tab> do everything
+inoremap <silent><expr> <TAB>
+     \ pumvisible() ? coc#_select_confirm() :
+     \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+     \ <SID>check_back_space() ? "\<TAB>" :
+     \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:LanguageClient_settingsPath = '~/.config/nvim/'
 
 " ==== Language Server ====
 let g:LanguageClient_autoStart = 1
@@ -88,7 +98,7 @@ let g:paredit_electric_return = 0
 let g:polyglot_disabled = ['elm']
 
 " ==== ALE ====
-let g:ale_enabled = 1
+let g:ale_enabled = 0
 let g:ale_sign_column_always = 0
 let g:ale_c_clang_options = "-std=c99 -Wall -Wpedantic -Wextra -fsanitize=address"
 let g:ale_lint_on_text_changed = 'never'
@@ -106,12 +116,12 @@ map <space>an :ALENextWrap<CR>
 
 " Ale for Rust
 let g:ale_rust_rls_config = {
-	\ 'rust': {
-		\ 'all_targets': 1,
-		\ 'build_on_save': 1,
-		\ 'clippy_preference': 'on'
-	\ }
-	\ }
+    \ 'rust': {
+        \ 'all_targets': 1,
+        \ 'build_on_save': 1,
+        \ 'clippy_preference': 'on'
+    \ }
+    \ }
 let g:ale_rust_rls_toolchain = ''
 let g:ale_linters = {'rust': ['rls']}
 
@@ -123,15 +133,23 @@ let g:rustfmt_fail_silently = 0
 
 " === easymotion ===
 " <Leader>f{char} to move to {char}
-map <CR> <Plug>(easymotion-overwin-f)
-nmap <space><CR> <Plug>(easymotion-overwin-f2)
+" map <CR> <Plug>(easymotion-overwin-f)
+nmap <space><CR> <Plug>(easymotion-overwin-f)
 
 " ==== Deoplete ====
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 
 " ==== Markdown-preview
 nmap <Space>tt <Plug>MarkdownPreviewToggle
 nmap <Space>ts <Plug>MarkdownPreview
+
+nmap <Space>lt :vs +term<CR>
+
+" === Grep ===
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+    set grepformat=%f:%l:%c:%m
+endif
 
 " ==== Slime ====
 if exists('$TMUX')
@@ -143,12 +161,6 @@ end
 
 autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
 autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
-
-" ==== ULTISNIPS ====
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:UltiSnipsEditSplit="vertical"
 
 " ==== JEDI-VIM ====
 let g:jedi#goto_command = ""
@@ -188,13 +200,22 @@ au Syntax *.scm,*.clj RainbowParenthesesLoadRound
 au Syntax *.scm,*.clj RainbowParenthesesLoadSquare
 au Syntax *.scm,*.clj RainbowParenthesesLoadBraces
 
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
 " ================
 " === SETTINGS ===
 " ================
 
 filetype plugin indent on
 syntax on
-set encoding=utf-8
+" set encoding=utf-8
 set path=.,**                            " Make certain commands look for all files in all subfolders
 set autoread
 set hidden
@@ -228,7 +249,8 @@ set nostartofline
 set noerrorbells
 set t_vb=
 set mouse=a                             " Enable mouse
-set cmdheight=1
+set cmdheight=2
+set updatetime=300
 set binary                              " Dont add newlines at the end of files.
 set noswapfile                          " Keep vim from creating automatic backup files.
 set showmatch                           " Show matching brackets.
@@ -255,16 +277,6 @@ let &runtimepath.=',~/.vim/bundle/neoterm'
 
 " Diff
 " set diffopt=vertical,filler,context:3,indent-heuristic,algorithm:patience,internal
-
-" === COLORSCHEME ===
-let base16colorspace=256
-colorscheme gruvbox
-let g:gruvbox_italics=1                         " Make sure terminal supports italics.
-let g:gruvbox_contrast_dark='hard'
-let g:gruvbox_contrast_light='hard'
-set background=dark                             " Dark background as default
-hi Normal ctermbg=none
-" Terminal colors: 1b1c1c
 
 " ==================
 " === Autogroups ===
@@ -298,6 +310,14 @@ augroup vimrc-incsearch-highlight
     autocmd CmdlineLeave /,\? :set nohlsearch
 augroup END
 
+" ==============
+" === COLORS ===
+" ==============
+
+" === COLORSCHEME ===
+let base16colorspace=256
+colorscheme base16-default-dark
+hi Normal ctermbg=none
 
 " =================
 " === KEY BINDS ===
@@ -305,6 +325,11 @@ augroup END
 
 " Map ctrl-s to enter command mode.
 map <C-s> :
+
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
 
 map <space>s :source ~/.config/nvim/init.vim<CR>
 map <space>e :vs $MYVIMRC<CR>
@@ -317,9 +342,25 @@ nnoremap <space>o :ALEToggle<CR>
 map <space>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> - :Files <C-r>=expand("%:h")<CR>/<CR>
-map <space>r :Rg<CR>
+nnoremap <space>rr :Rg<CR>
+nnoremap <space>rw yiw:Rg <C-r>=expand('<cword>')<CR><CR>
 nnoremap <space>tt :Tags<CR>
 nnoremap <space>h :Helptags<CR>
+
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Ignore'],
+  \ 'pointer': ['fg', 'Ignore'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " Preview in :Files
 command! -bang -nargs=? -complete=dir Files
