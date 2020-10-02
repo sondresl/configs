@@ -8,6 +8,8 @@ export LC_ALL=en_US.UTF-8
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 
+setopt auto_cd
+
 # Mouse support
 set -g mode-mouse on
 set -g mouse-resize-pane on
@@ -96,11 +98,12 @@ alias sml='rlwrap sml'
 alias swipl='rlwrap swipl'
 alias tls='tmux ls'
 alias ta='tmux a -t'
+alias tn='tmux new -s'
 alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
 alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
 alias tree='exa -l -T'
 alias host='cd ~/dev/UiO/H19'
-alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN1010 26-01-1993'
+alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
 alias vimo='vim -O'
 alias todo='vim ~/.todo.md'
 alias mux='tmuxinator'
@@ -147,6 +150,21 @@ unalias z 2> /dev/null
 z() {
   [ $# -gt 0 ] && _z "$*" && return
   cd "$(_zlua -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+}
+
+rett() {
+    cp ../rettermal.md retting.md
+    cp dead*/*.scm .
+    cp dead*/*.pdf .
+}
+
+resultater() {
+    for i in *; do
+        echo $i
+        rg poeng $i/*
+        cat $i/retting.md | pbcopy
+        read dummy
+    done
 }
 
 source ~/.fzf.zsh

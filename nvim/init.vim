@@ -34,6 +34,8 @@ call plug#begin('~/.nvim/plugged')
     " Look and feel
     Plug 'junegunn/goyo.vim'
     Plug 'kien/rainbow_parentheses.vim'
+    Plug 'vim-scripts/paredit.vim'
+    " Plug 'bhurlow/vim-parinfer'
     " Plug 'itchyny/lightline.vim'                " Modeline
     Plug 'gruvbox-community/gruvbox'            " Theme
     Plug 'sheerun/vim-polyglot'                 " Better language syntax coloring
@@ -90,7 +92,7 @@ let g:LanguageClient_serverCommands = {
     \ }
 
 " ==== Paredit ====
-let g:paredit_leader = '<CR>'
+let g:paredit_leader = ','
 let g:paredit_smartjump = 1
 let g:paredit_electric_return = 0
 
@@ -159,7 +161,7 @@ if exists('$TMUX')
     let g:slime_python_ipython = 1
 end
 
-autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
+autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
 autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
 
 " ==== JEDI-VIM ====
@@ -216,7 +218,7 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 filetype plugin indent on
 syntax on
 " set encoding=utf-8
-set path=.,**                            " Make certain commands look for all files in all subfolders
+set path=.,src/**                            " Make certain commands look for all files in all subfolders
 set autoread
 set hidden
 set showcmd
@@ -269,6 +271,8 @@ set smarttab
 set splitright
 set splitbelow
 
+set wrap
+
 " Permanent undo
 set undodir=~/.config/nvim/.vimdid
 set undofile
@@ -283,6 +287,7 @@ let &runtimepath.=',~/.vim/bundle/neoterm'
 " ==================
 augroup configgroup
     autocmd!
+    autocmd BufEnter *.jadd setlocal ft=java
     autocmd BufEnter *.sh setlocal tabstop=2
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
@@ -302,6 +307,9 @@ augroup configgroup
     autocmd FileType asm setlocal commentstring=#\ %s
     autocmd BufEnter *.cmp setlocal filetype=pascal
     autocmd FileType pascal setlocal commentstring=\(\*\ %s\ \*\)
+    autocmd BufEnter *.scm setlocal tabstop=2
+    autocmd BufEnter *.scm setlocal shiftwidth=2
+    autocmd BufEnter *.scm setlocal softtabstop=2
 augroup END
 
 augroup vimrc-incsearch-highlight
@@ -368,7 +376,7 @@ command! -bang -nargs=? -complete=dir Files
 
 " Automatic formatting
 nnoremap <F12> :silent! !clang-format -i -style='WebKit' %<CR>
-autocmd FileType haskell set formatprg=brittany
+autocmd FileType haskell set formatprg=stylish-haskell
 
 
 " F-buttons (Fairly rare and specific uses)
@@ -415,5 +423,8 @@ tnoremap <Esc> <C-\><C-n>
 
 " Binds for retting
 nmap <space>; :read ../rettemal.md<CR>
+
+" Indent entire file, retain cursor position and center it on screen
+nnoremap == msgg=G'szz
 
 set nottimeout
