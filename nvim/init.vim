@@ -15,7 +15,7 @@
 " Automatically install Plug if not installed.
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -33,99 +33,90 @@ call plug#begin('~/.nvim/plugged')
 
     " Look and feel
     Plug 'junegunn/goyo.vim'
-    Plug 'kien/rainbow_parentheses.vim'
     Plug 'vim-scripts/paredit.vim'
-    " Plug 'bhurlow/vim-parinfer'
-    " Plug 'itchyny/lightline.vim'                " Modeline
-    Plug 'gruvbox-community/gruvbox'            " Theme
+
     Plug 'sheerun/vim-polyglot'                 " Better language syntax coloring
-    Plug 'chriskempson/base16-vim'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    let g:airline_theme='base16_vim'
 
     " Git integration
     Plug 'tpope/vim-fugitive'
 
     " Linting and autocomplete
+    Plug 'w0rp/ale'
+    Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'                   " Snippets library
-    Plug 'w0rp/ale'                             " Syntax checking
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'davidhalter/jedi-vim'
 
-    " Language specific
-    Plug 'jceb/vim-orgmode'
-    " Plug 'vim-scripts/paredit.vim'
     Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-    " Plug 'elmcast/elm-vim'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     Plug 'rust-lang/rust.vim'
-
+    Plug '~/.config/setcolor'
 call plug#end()
 
-" === COC ===
 
 " === GOYO ===
 let g:goyo_width = 120
 let g:goyo_heigth = 100
 
-" Make <tab> do everything
-inoremap <silent><expr> <TAB>
-     \ pumvisible() ? coc#_select_confirm() :
-     \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-     \ <SID>check_back_space() ? "\<TAB>" :
-     \ coc#refresh()
+" " Make <tab> do everything
+" inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? coc#_select_confirm() :
+"      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
-let g:LanguageClient_settingsPath = '~/.config/nvim/'
+" let g:LanguageClient_settingsPath = '~/.config/nvim/'
 
 " ==== Language Server ====
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_loadSettings = 1
-let g:LanguageClient_diagnosticsEnable = 0
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rls'],
-    \ }
+" let g:LanguageClient_autoStart = 1
+" let g:LanguageClient_loadSettings = 1
+" let g:LanguageClient_diagnosticsEnable = 0
+" let g:LanguageClient_serverCommands = {
+"     \ 'rust': ['rls'],
+"     \ }
 
 " ==== Paredit ====
 let g:paredit_leader = ','
 let g:paredit_smartjump = 1
 let g:paredit_electric_return = 0
 
-" ==== Polyglot
-let g:polyglot_disabled = ['elm']
-
 " ==== ALE ====
 let g:ale_enabled = 0
-let g:ale_sign_column_always = 0
-let g:ale_c_clang_options = "-std=c99 -Wall -Wpedantic -Wextra -fsanitize=address"
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_enter = 0
-let g:ale_virtualtext_cursor = 1
+" let g:ale_sign_column_always = 0
+" let g:ale_c_clang_options = "-std=c99 -Wall -Wpedantic -Wextra -fsanitize=address"
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_insert_leave = 1
+" let g:ale_lint_on_save = 1
+" let g:ale_lint_on_enter = 0
+" let g:ale_virtualtext_cursor = 1
 
-let g:ale_fixers = { 'haskell': ['brittany'], 'c': ['clang-format']}
+let g:ale_fixers = { 'haskell': ['fourmolu'], 'c': ['clang-format']}
 let g:ale_c_clangformat_options = '-i -style=WebKit'
 
-map <space>af :ALEFix<CR>
-map <space>ap :ALEPrevious<CR>
-map <space>an :ALENextWrap<CR>
 
-" Ale for Rust
-let g:ale_rust_rls_config = {
-    \ 'rust': {
-        \ 'all_targets': 1,
-        \ 'build_on_save': 1,
-        \ 'clippy_preference': 'on'
-    \ }
-    \ }
-let g:ale_rust_rls_toolchain = ''
-let g:ale_linters = {'rust': ['rls']}
+" nmap <silent> <space>af :exe ":silent !fourmolu -i --indentation 2 %"<CR>
+nmap <silent> <space>af :exe ":silent %!fourmolu --indentation 2"<CR>
+nmap <silent> <space>ah :exe ":silent !hlint --refactor --refactor-options=\"--inplace\" %"<CR>
+
+" map <space>ap :ALEPrevious<CR>
+" map <space>an :ALENextWrap<CR>
+
+" " Ale for Rust
+" let g:ale_rust_rls_config = {
+"     \ 'rust': {
+"         \ 'all_targets': 1,
+"         \ 'build_on_save': 1,
+"         \ 'clippy_preference': 'on'
+"     \ }
+"     \ }
+" let g:ale_rust_rls_toolchain = ''
+" let g:ale_linters = {'rust': ['rls']}
 
 " ==== Rust autoformat
 let g:rustfmt_command = "rustfmt +nightly"
@@ -162,16 +153,8 @@ if exists('$TMUX')
 end
 
 autocmd FileType scheme nnoremap <c-c><c-d> :SlimeSend1 (load "<c-r>%")<CR>
-autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
-
-" ==== JEDI-VIM ====
-let g:jedi#goto_command = ""
-let g:jedi#goto_assignments_command = ""
-let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command = ""
-let g:jedi#usages_command = ""
-let g:jedi#completions_command = ""
-let g:jedi#rename_command = ""
+autocmd FileType scheme nnoremap <c-c><c-r> :SlimeSend1 scm
+autocmd FileType clojure nnoremap <c-c><c-d> :SlimeSend1 (load-file "<c-r>%")<CR>
 
 " ==== Hardtime ====
 let g:hardtime_default_on = 0
@@ -179,9 +162,6 @@ let g:hardtime_default_on = 0
 " =================
 " === LANGAUGES ===
 " =================
-
-" ==== PYTHON ====
-let g:jedi#completions_enabled = 0
 
 " ==== TEX ====
 let g:tex_flavor='latex'
@@ -197,10 +177,10 @@ let g:livepreview_previewer = 'open -a Preview'
 autocmd FileType make setlocal noexpandtab
 
 " ==== Rainbow Parens
-au VimEnter *.scm,*.clj RainbowParenthesesToggle
-au Syntax *.scm,*.clj RainbowParenthesesLoadRound
-au Syntax *.scm,*.clj RainbowParenthesesLoadSquare
-au Syntax *.scm,*.clj RainbowParenthesesLoadBraces
+" au VimEnter *.scm,*.clj RainbowParenthesesToggle
+" au Syntax *.scm,*.clj RainbowParenthesesLoadRound
+" au Syntax *.scm,*.clj RainbowParenthesesLoadSquare
+" au Syntax *.scm,*.clj RainbowParenthesesLoadBraces
 
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
@@ -232,7 +212,7 @@ set scrolloff=2                         " Always have 2 lines above/below cursor
 set shortmess+=I                        " Remove startup message
 set shortmess+=c
 set omnifunc=syntaxcomplete#Complete
-set dict+=~/.config/nvim/dicts/ordliste_aspell.txt
+" set dict+=~/.config/nvim/dicts/ordliste_aspell.txt
 set complete+=k
 
 " Wildmenu - Start writing a command and get options to <TAB> through.
@@ -282,6 +262,13 @@ let &runtimepath.=',~/.vim/bundle/neoterm'
 " Diff
 " set diffopt=vertical,filler,context:3,indent-heuristic,algorithm:patience,internal
 
+
+
+" function! RunFormat()
+"     :!fourmolu -i --indentation 2 %
+"     :e!
+" endfunction
+
 " ==================
 " === Autogroups ===
 " ==================
@@ -322,10 +309,57 @@ augroup END
 " === COLORS ===
 " ==============
 
+let g:gruvbox_bold = 1
+let g:gruvbox_contrast_dark  ='hard'
+let g:gruvbox_contrast_light ='hard'
+
 " === COLORSCHEME ===
 let base16colorspace=256
-colorscheme base16-default-dark
-hi Normal ctermbg=none
+if (has("termguicolors"))
+ set termguicolors
+endif
+set background=dark
+colorscheme gruvbox
+hi Normal guibg=none
+" let g:airline_theme='solarized'
+let g:airline_theme='gruvbox'
+
+" === COC ===
+" After colorscheme to ensure highlighting works as intented
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" nmap <space>rn <Plug>(coc-rename)
+nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> <leader>co :CocList --number-select outline<CR>
+" nmap <leader>cs :CocList --number-select -I symbols<CR>
+" nmap <leader>cl :CocList --number-select <CR>
+nmap <space>ch :call CocAction('doHover')<CR>
+" " nmap <leader>cf :call CocAction('format')<CR>
+" nmap <leader>cf :CocFix<CR>
+" nmap <silent> <leader>ct <Plug>(coc-type-definition)
+" nmap <silent> <leader>ci  <Plug>(coc-implementation)
+" nmap <silent> <leader>cr <Plug>(coc-references)
+" nmap <silent> <space>c<c-p> <Plug>(coc-diagnostic-prev)
+" nmap <silent> <space>c<c-n> <Plug>(coc-diagnostic-next)
+nmap <silent> <space>of :CocFix<CR>
+nmap <silent> <space>oa <Plug>(coc-codelens-action)
+highlight CocHighlightText  guibg=None ctermbg=None
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+command! -nargs=0 Format :call CocAction('format')
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
 
 " =================
 " === KEY BINDS ===
@@ -340,10 +374,11 @@ cnoremap <Esc>b <S-Left>
 cnoremap <Esc>f <S-Right>
 
 map <space>s :source ~/.config/nvim/init.vim<CR>
-map <space>e :vs $MYVIMRC<CR>
+map <space>ee :vs $MYVIMRC<CR>
+map <space>en :sp ~/.config/nvim/ftplugin/abbrevs.vim<CR>
 map <space>w :write<CR>
 map <space>q :q<CR>
-map <space><space> :e#<CR>
+nnoremap <space><space> <C-^>
 nnoremap <space>o :ALEToggle<CR>
 
 " === FZF ===
@@ -356,28 +391,29 @@ nnoremap <space>tt :Tags<CR>
 nnoremap <space>h :Helptags<CR>
 
 let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Ignore'],
-  \ 'pointer': ['fg', 'Ignore'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+            \ { 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Ignore'],
+            \ 'pointer': ['fg', 'Ignore'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
 
 " Preview in :Files
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+            \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" =======================
 
 " Automatic formatting
 nnoremap <F12> :silent! !clang-format -i -style='WebKit' %<CR>
 autocmd FileType haskell set formatprg=stylish-haskell
-
 
 " F-buttons (Fairly rare and specific uses)
 autocmd FileType python map <F9> :w<CR>:!python %<CR>
@@ -393,10 +429,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap Y y$
-noremap H ^
-noremap L $
-
-" Leader chords
 
 " Move between tabs
 nnoremap <space>tn gt
@@ -420,9 +452,6 @@ nnoremap <space>ls :syntax sync fromStart<CR>
 
 " Leave insert mode in built-in Terminal emulator
 tnoremap <Esc> <C-\><C-n>
-
-" Binds for retting
-nmap <space>; :read ../rettemal.md<CR>
 
 " Indent entire file, retain cursor position and center it on screen
 nnoremap == msgg=G'szz
