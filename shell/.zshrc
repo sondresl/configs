@@ -29,7 +29,7 @@ export PATH="/Users/sondrelunde/anaconda3/bin:$PATH"
 export PATH=/usr/local/smlnj/bin:$PATH
 
 # Add path for ABS
-export PATH=/Users/sondrelunde/dev/UiO/master/abstools/frontend/bin/bash:$PATH
+export PATH=/Users/sondrelunde/dev/UiO/master/master/abstools/frontend/bin/bash:$PATH
 
 # Path for Haskell
 export PATH=/Users/sondrelunde/.local/bin:$PATH
@@ -40,8 +40,6 @@ export BAT_CONFIG_PATH="/Users/sondrelunde/.config/shell/bat.conf"
 # Use vim to view man pages with colors
 export MANPAGER='nvim +Man!'
 export MANWIDTH=999
-
-source ~/.aockey
 
 # ZPLUG ===============================================================================
 # Check if zplug is installed
@@ -88,9 +86,9 @@ alias l='clear; exa -la --group-directories-first'
 alias ls='exa'
 alias sshos='sshfs sondrslu@login.uio.no:inf4151 ~/dev/UiO/V20/inf4151 -o reconnect,modules=iconv,from_code=iso-8859-1'
 alias uiofiler='sshfs sondrslu@login.uio.no: ~/uio -o reconnect,modules=iconv,from_code=iso-8859-1'
-alias scm='rlwrap /Applications/Racket\ v7.4/bin/plt-r5rs'
-alias racket='rlwrap /Applications/Racket\ v7.4/bin/racket'
-alias drracket='/Applications/Racket\ v7.4/DrRacket.app/Contents/MacOS/DrRacket &'
+alias scm='rlwrap /Applications/Racket\ v7.9/bin/plt-r5rs'
+alias racket='rlwrap /Applications/Racket\ v7.9/bin/racket'
+alias drracket='/Applications/Racket\ v7.9/DrRacket.app/Contents/MacOS/DrRacket &'
 alias rpi='ssh pi@192.168.0.10'
 alias vim='nvim'
 alias ff='fzf-tmux'
@@ -105,14 +103,14 @@ alias tree='exa -l -T'
 alias host='cd ~/dev/UiO/H19'
 alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
 alias vimo='vim -O'
-alias todo='vim ~/.todo.md'
 alias mux='tmuxinator'
 alias timer='open ~/Dropbox/timelisteV20'
 alias journal='vim ~/Dropbox/Learning/journal.md'
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
 alias umos='umount -f sondrslu@loft.uio.no:inf4151'
-
 alias compila='java -classpath build/classes/ runtime.VirtualMachine'
+alias note='vim ~/.note.md'
+alias vtl='vim ~/Dropbox/timelister/timeliste-november.csv'
 
 # Hub
 eval "$(hub alias -s)"
@@ -152,20 +150,8 @@ z() {
   cd "$(_zlua -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
 }
 
-rett() {
-    cp ../rettermal.md retting.md
-    cp dead*/*.scm .
-    cp dead*/*.pdf .
-}
-
-resultater() {
-    for i in *; do
-        echo $i
-        rg poeng $i/*
-        cat $i/retting.md | pbcopy
-        read dummy
-    done
-}
+# Sourcing various scripts
+source ~/.config/scripts/retting
 
 source ~/.fzf.zsh
 bindkey '^X' fzf-cd-widget
