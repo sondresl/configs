@@ -40,7 +40,7 @@ call plug#begin('~/.nvim/plugged')
     Plug 'vim-airline/vim-airline-themes'
 
     " Git integration
-    Plug 'tpope/vim-fugitive'
+    " Plug 'TimUntersberger/neogit'
 
     " Linting and autocomplete
     Plug 'w0rp/ale'
@@ -52,12 +52,12 @@ call plug#begin('~/.nvim/plugged')
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
     Plug 'rust-lang/rust.vim'
     Plug '~/.config/setcolor'
+
 call plug#end()
 
-
 " === GOYO ===
-let g:goyo_width = 120
-let g:goyo_heigth = 100
+let g:goyo_width = 85
+let g:goyo_heigth = 120
 
 " " Make <tab> do everything
 " inoremap <silent><expr> <TAB>
@@ -214,6 +214,7 @@ set shortmess+=c
 set omnifunc=syntaxcomplete#Complete
 " set dict+=~/.config/nvim/dicts/ordliste_aspell.txt
 set complete+=k
+set foldmethod=marker
 
 " Wildmenu - Start writing a command and get options to <TAB> through.
 set wildmenu                            " Tab completion when multiple options available
@@ -381,6 +382,8 @@ map <space>q :q<CR>
 nnoremap <space><space> <C-^>
 nnoremap <space>o :ALEToggle<CR>
 
+nnoremap <space>ob :AsyncRun make<CR>
+
 " === FZF ===
 map <space>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
@@ -457,3 +460,5 @@ tnoremap <Esc> <C-\><C-n>
 nnoremap == msgg=G'szz
 
 set nottimeout
+
+
