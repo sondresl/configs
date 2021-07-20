@@ -77,14 +77,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/goyo.vim"
   },
-  gruvbox = {
-    loaded = true,
-    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/gruvbox"
-  },
-  ["lightline.vim"] = {
-    loaded = true,
-    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/lightline.vim"
-  },
   ["lsp-trouble.nvim"] = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/lsp-trouble.nvim"
@@ -92,6 +84,10 @@ _G.packer_plugins = {
   lsp_status = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/lsp_status"
+  },
+  ["lualine.nvim"] = {
+    loaded = true,
+    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/lualine.nvim"
   },
   ["nvim-compe"] = {
     loaded = true,
@@ -104,6 +100,10 @@ _G.packer_plugins = {
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/nvim-lspconfig"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
@@ -121,9 +121,17 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/telescope-fzf-native.nvim"
   },
+  ["telescope-fzy-native.nvim"] = {
+    loaded = true,
+    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/telescope-fzy-native.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/telescope.nvim"
+  },
+  ultisnips = {
+    loaded = true,
+    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/ultisnips"
   },
   ["vim-commentary"] = {
     loaded = true,
@@ -136,6 +144,10 @@ _G.packer_plugins = {
   ["vim-polyglot"] = {
     loaded = true,
     path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/vim-polyglot"
+  },
+  ["vim-snippets"] = {
+    loaded = true,
+    path = "/Users/sondrelunde/.local/share/nvim/site/pack/packer/start/vim-snippets"
   },
   ["vim-vsnip"] = {
     loaded = true,

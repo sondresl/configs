@@ -17,6 +17,9 @@ vim.api.nvim_set_keymap("n", "<C-K>", "<C-W><C-K>", { noremap = true, silent = t
 vim.api.nvim_set_keymap("n", "<C-L>", "<C-W><C-L>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-H>", "<C-W><C-H>", { noremap = true, silent = true })
 
+vim.api.nvim_set_keymap("n", "<Space>j", ":cprev<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Space>k", ":cnext<CR>", { noremap = true, silent = true })
+
 vim.api.nvim_set_keymap("n", "Y", "y$", { noremap = true, silent = true})
 
 -- ================

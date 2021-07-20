@@ -22,11 +22,20 @@ require'compe'.setup {
   };
 
   source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    vsnip = true;
-    ultinips = true;
-    luasnip = true;
+
+    -- Symbols taken from 
+    -- https://github.com/ChristianChiarulli/LunarVim/blob/rolling/lua/core/compe.lua
+
+    path = { kind = "   (Path)" };
+    buffer = { kind = "   (Buffer)" };
+    calc = { kind = "   (Calc)" };
+    vsnip = false;
+    nvim_lsp = { kind = "   (LSP)" };
+    ultisnips = { kind = "   (UltiSnips)" };
+
+    luasnip = false;
   };
+
 }
+
+vim.api.nvim_set_keymap("i", "<C-i>", "compe#confirm({ 'keys': '<C-i>', 'select': v:true })", { expr = true })

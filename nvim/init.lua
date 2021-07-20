@@ -5,21 +5,22 @@ require('my.telescope')
 require('my.lsp')
 require('my.compe')
 require('my.easymotion')
+require('my.lualine')
 
 vim.g.builtin_lsp = true
 vim.opt.path:append(".,**")
 
 vim.opt.hidden          = true
 vim.opt.hlsearch        = false
-vim.opt.showmode        = true
+vim.opt.showmode        = false
 
 vim.opt.incsearch       = true
 vim.opt.inccommand      = "nosplit"
 
 vim.opt.scrolloff       = 2
 
--- vim.opt.completeopt     = "menuone,noinsert,noselect"
-vim.opt.completeopt     = "menuone,noselect"
+vim.opt.completeopt     = "menuone,noinsert,noselect"
+-- vim.opt.completeopt     = "menuone,noselect"
 vim.opt.wildmenu        = true
 
 vim.opt.swapfile        = false
@@ -48,8 +49,8 @@ vim.opt.smarttab        = true
 vim.opt.splitbelow      = true
 vim.opt.splitright      = true
 
-vim.opt.background      = 'dark'
-vim.g.colors_name       = 'gruvbox'
+vim.opt.background      = "dark"
+vim.g.colors_name       = "gruvbox"
 
 -- Permanent undo
 -- vim.opt.undodir         = "~/.config/nvim/.vimdid"
@@ -70,4 +71,3 @@ augroup END
     ]],
     false)
 
-vim.api.nvim_exec('hi Normal ctermbg=none', false)
