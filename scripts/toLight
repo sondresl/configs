@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+source ~/.zshrc
+
+_base16 "/Users/sondrelunde/.config/base16-shell/scripts/base16-one-light.sh" one-light
+sed -i '' -e s/'vim.opt.background      = "dark"'/'vim.opt.background      = "light"'/ ~/.config/nvim/init.lua
+sed -i '' -e s/'   theme = "gruvbox"'/'    theme = "gruvbox_light"'/ ~/.config/nvim/lua/my/lualine.lua
