@@ -49,8 +49,9 @@ vim.opt.smarttab        = true
 vim.opt.splitbelow      = true
 vim.opt.splitright      = true
 
-vim.opt.background      = "dark"
+vim.opt.background      = "light"
 vim.g.colors_name       = "gruvbox"
+-- vim.cmd([[colorscheme gruvbox]])
 
 -- Permanent undo
 -- vim.opt.undodir         = "~/.config/nvim/.vimdid"

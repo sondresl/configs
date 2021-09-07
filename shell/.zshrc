@@ -1,8 +1,13 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=/usr/local/bin:$PATH
 
 export LC_ALL=en_US.UTF-8
 
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
+
+# Autocomplete for k8s
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 # User configuration
 zstyle ':completion:*' menu select
@@ -20,22 +25,18 @@ set -o emacs
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
 #
 # Homebrew wants this path
-export PATH="/usr/local/sbin:$PATH"
-
-# added by Anaconda3 5.0.0 installer (Copied from .bash_profile)
-export PATH="/Users/sondrelunde/anaconda3/bin:$PATH"
-
-# Add path for SML
-export PATH=/usr/local/smlnj/bin:$PATH
-
-# Add path for ABS
-export PATH=/Users/sondrelunde/dev/UiO/master/master/abstools/frontend/bin/bash:$PATH
+# export PATH="/usr/local/sbin:$PATH"
 
 # Path for Haskell
-export PATH=/Users/sondrelunde/.local/bin:$PATH
-export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
+# export PATH=/Users/sondrelunde/.local/bin:$PATH
+# export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
 export BAT_CONFIG_PATH="/Users/sondrelunde/.config/shell/bat.conf"
+
+export EDITOR="nvim"
+
+# Rust / Cargo
+source $HOME/.cargo/env
 
 # Use vim to view man pages with colors
 export MANPAGER='nvim +Man!'
@@ -99,7 +100,7 @@ alias ta='tmux a -t'
 alias tn='tmux new -s'
 alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
 alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
-alias tree='exa -l -T'
+alias tree='exa -la -T'
 alias host='cd ~/dev/UiO/H19'
 alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
 alias vimo='vim -O'
@@ -111,9 +112,10 @@ alias umos='umount -f sondrslu@loft.uio.no:inf4151'
 alias compila='java -classpath build/classes/ runtime.VirtualMachine'
 alias note='vim ~/.note.md'
 alias vtl='vim ~/Dropbox/timelister/timeliste-november.csv'
+alias rmkube='kubectl delete deployments,pods,services,replicasets,statefulsets,cronjobs,daemonsets --all'
 
 # Hub
-eval "$(hub alias -s)"
+# eval "$(hub alias -s)"
 
 # Functions -----------------
 take() {
@@ -150,12 +152,10 @@ z() {
   cd "$(_zlua -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
 }
 
-# Sourcing various scripts
-source ~/.config/scripts/retting
-
 source ~/.fzf.zsh
 bindkey '^X' fzf-cd-widget
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --color auto'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git"
 
+if [ -e /Users/sondrelunde/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/sondrelunde/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

@@ -20,6 +20,9 @@ return require('packer').startup(function()
     use "nvim-telescope/telescope.nvim" -- fuzzy find ALL the things
     use "nvim-telescope/telescope-fzy-native.nvim" -- Compiled sorter
 
+
+    use {"ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+
     -- Look and feel
     use {
         'hoob3rt/lualine.nvim',
