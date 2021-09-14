@@ -1,0 +1,22 @@
+
+set hidden
+set hlsearch
+set showmode
+
+set incsearch
+set inccommand
+
+set scrolloff=2
+set ignorecase
+set smartcase
+
+" Mapppings
+map <C-s> :
+map <space>l :noh<CR>
+map <space>s :source ~/.ideavim<CR>
+
+augroup vimrc-incsearch-highlight
+    autocmd!
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
+augroup END
