@@ -10,6 +10,17 @@ set scrolloff=2
 set ignorecase
 set smartcase
 
+set clipboard=unnamed
+
+" Plugins
+set commentary
+set surround
+set highlightedyank
+set NERDTree
+
+" Custom IntelliJ smart join
+set ideajoin
+
 " Mapppings
 map <C-s> :
 map <space>w :w<CR>
@@ -24,11 +35,22 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-J> <C-W><C-J>
 
+nnoremap <C-N> :tabnext<CR>
+nnoremap <C-P> :tabprev<CR>
+
 " Action mappings
 map <space>/ :action SearchEverywhere<CR>
 nnoremap <space>fs :action GotoSymbol<CR>
 nnoremap <space>ff :action GotoFile<CR>
 nnoremap <space>fa :action GotoAction<CR>
+nnoremap <space>fc :action GotoClass<CR>
+
+" built-in navigation to navigated items works better
+nnoremap <c-o> :action Back<cr>
+nnoremap <c-i> :action Forward<cr>
+" but preserve ideavim defaults
+nnoremap g<c-o> <c-o>
+nnoremap g<c-i> <c-i>
 
 augroup vimrc-incsearch-highlight
     autocmd!
@@ -38,3 +60,5 @@ augroup END
 
 " For mapping to IntelliJ actions, see the list of actions: 
 " https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
+
+" eirikhalvard: https://github.com/eirikhalvard/dotfiles/blob/master/shell/ideavimrc
