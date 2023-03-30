@@ -13,11 +13,14 @@ vim.opt.path:append(".,**")
 vim.opt.hidden          = true
 vim.opt.hlsearch        = false
 vim.opt.showmode        = false
+vim.opt.foldmethod      = "marker"
 
 vim.opt.incsearch       = true
 vim.opt.inccommand      = "nosplit"
 
 vim.opt.scrolloff       = 2
+
+vim.opt.timeout         = false
 
 vim.opt.completeopt     = "menuone,noinsert,noselect"
 -- vim.opt.completeopt     = "menuone,noselect"
@@ -49,7 +52,7 @@ vim.opt.smarttab        = true
 vim.opt.splitbelow      = true
 vim.opt.splitright      = true
 
-vim.opt.background      = "light"
+vim.opt.background      = "dark"
 vim.g.colors_name       = "gruvbox"
 -- vim.cmd([[colorscheme gruvbox]])
 

@@ -29,6 +29,11 @@ map <space>l :noh<CR>
 map <space>s :source ~/.ideavimrc<CR>
 map <space><space> :e#<CR>
 
+noremap <c-o> :action Back<CR>
+noremap <c-i> :action Forward<CR>
+nnoremap g<c-o> <c-o>
+nnoremap g<c-i> <c-i>
+
 " Move between panes
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
@@ -45,9 +50,14 @@ nnoremap <space>ff :action GotoFile<CR>
 nnoremap <space>fa :action GotoAction<CR>
 nnoremap <space>fc :action GotoClass<CR>
 
+nnoremap <C-W><C-R> :action MoveEditorToOppositeTabGroup<CR>
+
 " built-in navigation to navigated items works better
 nnoremap <c-o> :action Back<cr>
 nnoremap <c-i> :action Forward<cr>
+
+nnoremap <space>fn :action GotoNextError<CR>
+nnoremap <space>fp :action GotoPreviousError<CR>
 " but preserve ideavim defaults
 nnoremap g<c-o> <c-o>
 nnoremap g<c-i> <c-i>

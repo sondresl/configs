@@ -2,6 +2,5 @@
 :set +t
 :m + Text.Show.Functions
 
-import Control.Lens
 import Data.List.Extra
 import qualified Data.Map.Strict as M

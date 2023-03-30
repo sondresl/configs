@@ -51,6 +51,9 @@ return require('packer').startup(function()
     --     use "nvim-treesitter/nvim-treesitter-textobjects" -- custom text objects from treesitter
     --     use "nvim-treesitter/nvim-treesitter-refactor"    -- nice refactoring helpers
 
+    -- Rust
+    use "rust-lang/rust.vim"
+
     -- Other nice to have
     use {
         "hrsh7th/nvim-compe",                       -- autocomplete

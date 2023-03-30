@@ -1,13 +1,16 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=/usr/local/bin:$PATH
+# Sondre Lunde
+# .zshrc
+
+# zmodload zsh/zprof
 
 export LC_ALL=en_US.UTF-8
 
-autoload bashcompinit && bashcompinit
-autoload -Uz compinit && compinit
+# autoload -Uz compinit && compinit
+# autoload bashcompinit && bashcompinit
+ZSH_DISABLE_COMPFIX="true"
 
 # Autocomplete for k8s
-[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+# [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 # User configuration
 zstyle ':completion:*' menu select
@@ -23,15 +26,26 @@ set -o emacs
 
 # Homebrew Python 3
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
+export PATH="/Users/sondrelunde/Library/Python/3.10/bin:$PATH"
+export PATH="/Users/sondrelunde/.pyenv/versions/3.7.16/bin:$PATH"
 #
 # Homebrew wants this path
 # export PATH="/usr/local/sbin:$PATH"
 
-# Path for Haskell
-# export PATH=/Users/sondrelunde/.local/bin:$PATH
-# export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
+# Add ~/.local/bin to path (for various scripts)
+export PATH="~/.local/bin:$PATH"
 
-export BAT_CONFIG_PATH="/Users/sondrelunde/.config/shell/bat.conf"
+# Tex 
+export PATH="/Library/TeX/texbin:$PATH"
+
+# Gradle
+export PATH=$PATH:/opt/gradle/gradle-7.3/bin
+
+# Path for Go
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
+# Path for Haskell
+[ -f "/Users/sondrelunde/.ghcup/env" ] && source "/Users/sondrelunde/.ghcup/env" # ghcup-env
 
 export EDITOR="nvim"
 
@@ -46,17 +60,17 @@ export MANWIDTH=999
 # Check if zplug is installed
 if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
+  echo "Cloning fresh zplug ..."
   source ~/.zplug/init.zsh && zplug update --self
 fi
 
 source ~/.zplug/init.zsh
 
-    zplug "plugins/git",   from:oh-my-zsh
-    # zplug "rupa/z", use:"z."
-    zplug "skywind3000/z.lua"
-    zplug "romkatv/powerlevel10k", use:"powerlevel10k.zsh-theme"
-    zplug "zsh-users/zsh-autosuggestions"
-    zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "plugins/git",   from:oh-my-zsh
+zplug "skywind3000/z.lua"
+zplug "romkatv/powerlevel10k", use:"powerlevel10k.zsh-theme"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Install packages that have not been installed yet
 if ! zplug check --verbose; then
@@ -71,6 +85,7 @@ fi
 zplug load
 # ==== End of zplug ==================================================================
 
+export PATH="$PATH:$FORGIT_INSTALL_DIR/bin"
 source ~/.purepower
 
 # Base16 Shell
@@ -80,39 +95,41 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # Aliases
-alias k='javac *java'
-alias j='java'
-alias jc='rm *.class'
-alias l='clear; exa -la --group-directories-first'
-alias ls='exa'
-alias sshos='sshfs sondrslu@login.uio.no:inf4151 ~/dev/UiO/V20/inf4151 -o reconnect,modules=iconv,from_code=iso-8859-1'
-alias uiofiler='sshfs sondrslu@login.uio.no: ~/uio -o reconnect,modules=iconv,from_code=iso-8859-1'
-alias scm='rlwrap /Applications/Racket\ v7.9/bin/plt-r5rs'
-alias racket='rlwrap /Applications/Racket\ v7.9/bin/racket'
-alias drracket='/Applications/Racket\ v7.9/DrRacket.app/Contents/MacOS/DrRacket &'
+alias ls='exa --icons'
+alias l='clear; exa -la --icons --group-directories-first --icons'
+alias tree='exa -la -T --git-ignore'
+alias scm='rlwrap /Applications/Racket\ v8.2/bin/plt-r5rs'
+alias racket='rlwrap /Applications/Racket\ v8.2/bin/racket'
+alias drracket='/Applications/Racket\ v8.2/DrRacket.app/Contents/MacOS/DrRacket &'
 alias rpi='ssh pi@192.168.0.10'
 alias vim='nvim'
-alias ff='fzf-tmux'
 alias sml='rlwrap sml'
 alias swipl='rlwrap swipl'
 alias tls='tmux ls'
 alias ta='tmux a -t'
 alias tn='tmux new -s'
-alias ml='rlwrap python /Users/sondrelunde/Workspace/Koding/minilisp/minilisp.py /Users/sondrelunde/Workspace/Koding/minilisp/lib.mini'
-alias rasp='/Users/sondrelunde/Workspace/Koding/Rust/rasp/target/release/rasp'
-alias tree='exa -la -T'
-alias host='cd ~/dev/UiO/H19'
 alias timel='python ~/dev/Timeliste/timeliste.py Sondre Lunde IN2040 26-01-1993'
-alias vimo='vim -O'
-alias mux='tmuxinator'
-alias timer='open ~/Dropbox/timelisteV20'
-alias journal='vim ~/Dropbox/Learning/journal.md'
-alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
-alias umos='umount -f sondrslu@loft.uio.no:inf4151'
-alias compila='java -classpath build/classes/ runtime.VirtualMachine'
-alias note='vim ~/.note.md'
-alias vtl='vim ~/Dropbox/timelister/timeliste-november.csv'
+alias cat='bat --plain'
+
+alias bra='git forgit checkout_branch'
+alias gdiff='git forgit diff'
+alias gl25='git log -n 25 --oneline'
+alias ten='git log -n 10'
+alias five='git log -n 5'
+
 alias rmkube='kubectl delete deployments,pods,services,replicasets,statefulsets,cronjobs,daemonsets --all'
+alias python='/usr/bin/python3'
+
+alias cc='exec_common_commands'
+alias rbup='git fetch upstream && git rebase upstream/master'
+alias pushf='git fetch upstream && git rebase upstream/master && git push -f'
+alias common='vim ~/.common_commands'
+
+# alias gproxy='sudo ssh -f -nNT gitproxy'
+# alias gproxy-status='sudo ssh -O check gitproxy'
+# alias gproxy-off='sudo ssh -O exit gitproxy'
+alias gproxy='~/dev/repositories/gitproxy-login-helper/devicelogin-helper/gproxy-auto.sh'
+alias pim='/Users/sondrelunde/dev/repositories/markets/map-gists/azure-pim-activate/activate-pims.sh'
 
 # Hub
 # eval "$(hub alias -s)"
@@ -131,6 +148,8 @@ runhs() {
     ghcid $1 -r
 }
 
+### FZF Functions
+
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
     local pid
@@ -146,10 +165,34 @@ fkill() {
     fi
 }
 
+# cdf - cd into the directory of the selected file
+cdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
 unalias z 2> /dev/null
 z() {
   [ $# -gt 0 ] && _z "$*" && return
   cd "$(_zlua -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+}
+
+# Git
+# fbr - checkout git branch
+fbr() {
+  local branches branch
+  branches=$(git --no-pager branch -vv) &&
+  branch=$(echo "$branches" | fzf +m --height ${FZF_TMUX_HEIGHT:-40%}) &&
+  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+
+# Common commands
+# 
+exec_common_commands() {
+  local cmd
+  cmd=$(cat ~/.common_commands | fzf --height ${FZF_TMUX_HEIGHT:-40%}) && 
+      eval $cmd
 }
 
 source ~/.fzf.zsh
@@ -158,4 +201,26 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --color
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git"
 
-if [ -e /Users/sondrelunde/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/sondrelunde/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+# TMUX
+
+# tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
+# `tm` will allow you to select your tmux session via fzf.
+# `tm irc` will attach to the irc session (if it exists), else it will create it.
+
+tm() {
+  [[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
+  if [ $1 ]; then
+    tmux $change -t "$1" 2>/dev/null || (tmux new-session -d -s $1 && tmux $change -t "$1"); return
+  fi
+  session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf --height ${FZF_TMUX_HEIGHT:-40%} --exit-0) &&  tmux $change -t "$session" || echo "No sessions found."
+}
+
+# Shell performance testing
+timezsh() {
+    shell=${1-$SHELL}
+    for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
+}
+
+# Shell prompt
+# export STARSHIP_CONFIG=~/.config/shell/starship.toml
+# eval "$(starship init zsh)"

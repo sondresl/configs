@@ -23,7 +23,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', 'gd',           '<cmd>lua vim.lsp.buf.definition()<CR>',                    opts)
     buf_set_keymap('n', 'K',            '<cmd>lua vim.lsp.buf.hover()<CR>',                         opts)
     buf_set_keymap('n', 'gi',           '<cmd>lua vim.lsp.buf.implementation()<CR>',                opts)
-    buf_set_keymap('n', '<C-k>',        '<cmd>lua vim.lsp.buf.signature_help()<CR>',                opts)
+    -- buf_set_keymap('n', '<C-k>',        '<cmd>lua vim.lsp.buf.signature_help()<CR>',                opts)
     buf_set_keymap('n', '<space>ld',    '<cmd>lua vim.lsp.buf.type_definition()<CR>',               opts)
     buf_set_keymap('n', '<space>lr',    '<cmd>lua vim.lsp.buf.rename()<CR>',                        opts)
     buf_set_keymap('n', '<space>la',    '<cmd>lua vim.lsp.buf.code_action()<CR>',                   opts)
@@ -38,8 +38,30 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { "hls" }
+local servers = { "hls", "rust_analyzer" }
 
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup { on_attach = on_attach }
 end
+
+nvim_lsp.rust_analyzer.setup({
+    on_attach=on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            imports = {
+                granularity = {
+                    group = "module",
+                },
+                prefix = "self",
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+        }
+    }
+})
