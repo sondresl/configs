@@ -30,10 +30,11 @@ export PATH="/Users/sondrelunde/Library/Python/3.10/bin:$PATH"
 export PATH="/Users/sondrelunde/.pyenv/versions/3.7.16/bin:$PATH"
 #
 # Homebrew wants this path
-# export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 
 # Add ~/.local/bin to path (for various scripts)
-export PATH="~/.local/bin:$PATH"
+export PATH="Users/sondrelunde/.local/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 
 # Tex 
 export PATH="/Library/TeX/texbin:$PATH"
@@ -95,14 +96,14 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # Aliases
-alias ls='exa --icons'
-alias l='clear; exa -la --icons --group-directories-first --icons'
-alias tree='exa -la -T --git-ignore'
+alias ls='eza --icons'
+alias l='clear; eza -la --icons --group-directories-first'
+alias tree='eza -la -T --git-ignore'
 alias scm='rlwrap /Applications/Racket\ v8.2/bin/plt-r5rs'
 alias racket='rlwrap /Applications/Racket\ v8.2/bin/racket'
 alias drracket='/Applications/Racket\ v8.2/DrRacket.app/Contents/MacOS/DrRacket &'
 alias rpi='ssh pi@192.168.0.10'
-alias vim='nvim'
+alias vim='/Users/sondrelunde/.local/bin/lvim'
 alias sml='rlwrap sml'
 alias swipl='rlwrap swipl'
 alias tls='tmux ls'
@@ -116,20 +117,20 @@ alias gdiff='git forgit diff'
 alias gl25='git log -n 25 --oneline'
 alias ten='git log -n 10'
 alias five='git log -n 5'
+alias lg='lazygit'
 
-alias rmkube='kubectl delete deployments,pods,services,replicasets,statefulsets,cronjobs,daemonsets --all'
-alias python='/usr/bin/python3'
+alias python='/usr/local/bin/python3.11'
 
 alias cc='exec_common_commands'
 alias rbup='git fetch upstream && git rebase upstream/master'
 alias pushf='git fetch upstream && git rebase upstream/master && git push -f'
 alias common='vim ~/.common_commands'
 
-# alias gproxy='sudo ssh -f -nNT gitproxy'
-# alias gproxy-status='sudo ssh -O check gitproxy'
-# alias gproxy-off='sudo ssh -O exit gitproxy'
 alias gproxy='~/dev/repositories/gitproxy-login-helper/devicelogin-helper/gproxy-auto.sh'
 alias pim='/Users/sondrelunde/dev/repositories/markets/map-gists/azure-pim-activate/activate-pims.sh'
+
+alias k='kubectl'
+alias kg='kubectl get'
 
 # Hub
 # eval "$(hub alias -s)"
