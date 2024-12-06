@@ -47,6 +47,8 @@ export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
 # Path for Haskell
 [ -f "/Users/sondrelunde/.ghcup/env" ] && source "/Users/sondrelunde/.ghcup/env" # ghcup-env
+# Some hack for AOC24
+export PATH="$PATH:$HOME/.ghcup/hls/2.9.0.1/bin"
 
 export EDITOR="nvim"
 
@@ -98,7 +100,7 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 # Aliases
 alias ls='eza --icons'
 alias l='clear; eza -la --icons --group-directories-first'
-alias tree='eza -la -T --git-ignore'
+alias tree='eza -la -T --git-ignore --group-directories-first'
 alias scm='rlwrap /Applications/Racket\ v8.2/bin/plt-r5rs'
 alias racket='rlwrap /Applications/Racket\ v8.2/bin/racket'
 alias drracket='/Applications/Racket\ v8.2/DrRacket.app/Contents/MacOS/DrRacket &'
@@ -114,10 +116,12 @@ alias cat='bat --plain'
 
 alias bra='git forgit checkout_branch'
 alias gdiff='git forgit diff'
-alias gl25='git log -n 25 --oneline'
-alias ten='git log -n 10'
-alias five='git log -n 5'
-alias lg='lazygit'
+
+alias ll='lazygit'
+
+alias g5='git log -n 5'
+alias g10='git log -n 10'
+alias g25='git log -n 25 --oneline'
 
 alias python='/usr/local/bin/python3.11'
 
@@ -131,6 +135,12 @@ alias pim='/Users/sondrelunde/dev/repositories/markets/map-gists/azure-pim-activ
 
 alias k='kubectl'
 alias kg='kubectl get'
+alias aks='kubectl config use-context'
+
+# Utility for switching the namespace of the current context in kubectl
+ns () {
+  kubectl config set-context --current --namespace=$1
+}
 
 # Hub
 # eval "$(hub alias -s)"
